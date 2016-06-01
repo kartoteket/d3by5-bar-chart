@@ -1,5 +1,5 @@
-# d3by5-pie-chart
-The d3by5 is part of the d3by5 graph tools, this specific package will draw a pie chart based on Mike Bostocks [Towards Reusable Charts](https://bost.ocks.org/mike/chart/) using d3 v4.0
+# d3by5-horisontal-bar-graph
+The d3by5-horisontal-bar-graph is part of the d3by5 graph tools, this specific package will draw a pie chart based on Mike Bostocks [Towards Reusable Charts](https://bost.ocks.org/mike/chart/)
 
 ## NOTE
 This is an internal project, you are probably better off using somethin like [C3](https://github.com/c3js/c3). That said, just give it a try and contact us back (no capslock please).
@@ -15,8 +15,8 @@ use the [version] version if you want to keep a specific version, use submodules
 
 #### dist/
 A browserified and uglified version with all dependencies included. Use this if you only want a simple graph to test.
-* pie-chart-[version].min.js    // uglified and minified with version
-* pie-chart.min.js              // uglified and minified without version
+* bar-graph-[version].min.js    // uglified and minified with version
+* bar-graph.min.js              // uglified and minified without version
 
 ## DEPENDENCIES
 Two dependencies in package.json
@@ -40,18 +40,18 @@ will get you all you need
 
 
 ## EXAMPLE
-All methods are chained, you can simply instanciate a new pie chart like this
+All methods are chained, you can simply instanciate a new bar graph like this
 
 ```javascript
-var pie = require('d3by5-pie-chart');
+var bar = require('d3by5-horisontal-bar-graph');
 
-var piechart = piechart()
+var bargraph = bargraph()
                     .width(500)
                     .height(400)
                     .data([{label:'coffee', values: 509}, {label:'tea', values: 1}]);
 
-d3.select('.js-pie-chart')
-    .call(piechart);
+d3.select('.js-bar-graph')
+    .call(bargraph);
 ```
 
 ## LICENCE
