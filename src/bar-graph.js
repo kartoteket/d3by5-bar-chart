@@ -3,13 +3,13 @@ var _ = require('underscore')
   , d3 = require('d3')
 ;
 
-module.exports = pieChart;
+module.exports = HorisontalBarGraph;
 
 /**
  * The entrypoint
  * @return {[type]} [description]
  */
-function pieChart () {
+function HorisontalBarGraph () {
 
   var options = {};
   function chart (selection) {
