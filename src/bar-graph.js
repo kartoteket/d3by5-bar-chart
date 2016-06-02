@@ -93,5 +93,17 @@ function HorisontalBarGraph () {
       return chart;
     };
 
+    /**
+     * Sets a listener on the clices of the chart
+     * @param  {String} action    - the type of action to listen to ( ie. 'click', 'mouseover')
+     * @param  {Function} method  -  A bound method to be called when the action is invoked, passes the datum for this specific slice
+     * @return {Mixed}            - the value or chart
+     */
+    chart.on = function (action, method) {
+      if (!arguments.length) return options.on;
+      options.on = {action: action, method: method};
+      return chart;
+    };
+
   return chart;
 }
