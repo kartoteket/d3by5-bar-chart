@@ -19,27 +19,38 @@ function HorisontalBarGraph () {
 
       selection.each(function () {
 
+        var data = _.map(options.data, function (d) {
+              return d.values;
+            });
+
         var barSpacing  = options.height / options.data.length;
         var barHeight   = barSpacing - options.padding;
-        var maxValue    = d3.max(options.data);
+        var maxValue    = d3.max(data);
         var widthScale  = options.width / maxValue;
+
 
         var dom = d3.select(this);
         var svg = dom.append('svg')
             .attr('class', 'chart barchart')
             .attr('height', options.height)
-            .attr('width', options.width)
-            .style('fill', options.fillColor);
+            .attr('width', options.width);
 
         var bars = svg.selectAll('rect.chart__bar')
-            .data(options.data)
+            .data(data)
             .enter()
             .append('rect')
             .attr('class', 'chart__bar')
             .attr('y', function (d, i) { return i * barSpacing;  })
             .attr('height', barHeight)
             .attr('x', 0)
-            .attr('width', function (d) { return d * widthScale; });
+            .attr('width', function (d) { return d * widthScale; })
+            .attr('fill', function (d, i) {
+              var data = options.data[i];
+              if (data && data.color) {
+                return data.color;
+              }
+              return options.fillColor;
+            });
 
       });
     }
