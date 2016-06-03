@@ -7,6 +7,9 @@ This project adheres (well, maybe not quite) to [Semantic Versioning](http://sem
 ### Added
 - Added posibility to set directions (horisontal | vertical)
 
+## Changed
+- More details in the README
+
 ## [0.0.1] - 2016-06-01
 ### Added
 - Cloned over the pie chart repo and adjusted
