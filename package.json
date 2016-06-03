@@ -1,21 +1,21 @@
 {
-  "name": "d3by5-pie-chart",
+  "name": "d3by5-horisontal_bar-graph",
   "version": "0.0.1",
-  "description": "A d3 implementation of pie charts",
+  "description": "A d3 implementation of horisontal bar graphs",
   "main": "index.js",
   "scripts": {
     "build": "bin/build.sh"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kartoteket/d3by5-pie-chart.git"
+    "url": "git+https://github.com/kartoteket/d3by5-horisontal_bar-graph.git"
   },
   "keywords": [
     "d3",
     "kartoteket",
     "visualization",
     "visualisation",
-    "pie",
+    "bar",
     "chart",
     "graph"
   ],
@@ -26,11 +26,14 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kartoteket/d3by5-pie-chart/issues"
+    "url": "https://github.com/kartoteket/d3by5-horisontal_bar-graph/issues"
   },
-  "homepage": "https://github.com/kartoteket/d3by5-pie-chart#readme",
+  "homepage": "https://github.com/kartoteket/d3by5-horisontal_bar-graph#readme",
   "dependencies": {
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+
+    "//": "LOCAL DEPENDENCIES",
+    "d3by5-base-chart": "file:./d3by5-base-chart"
   },
   "devDependencies": {
     "browserify": "^13.0.1",

@@ -29,10 +29,10 @@ buildall()
   # create the directories
   mkdir -p dist
   # browserify the full dev version without any uglifying
-  browserify src/pie-chart.js | uglifyjs -m -c > "dist/pie-chart-${PACKAGE_VERSION}.min.js";
-#   --source-map "dist/pie-chart-${PACKAGE_VERSION}.min.js.map"
+  browserify src/bar-graph.js | uglifyjs -m -c > "dist/bar-graph-${PACKAGE_VERSION}.min.js";
+#   --source-map "dist/bar-graph-${PACKAGE_VERSION}.min.js.map"
 
-  browserify src/pie-chart.js | uglifyjs -m -c > dist/pie-chart.min.js;
+  browserify src/bar-graph.js | uglifyjs -m -c > dist/bar-graph.min.js;
  #  --source-map dist/pie-chart.min.js.map
 }
 
