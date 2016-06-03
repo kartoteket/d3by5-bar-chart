@@ -1,7 +1,7 @@
 'use:strict';
 var _ = require('underscore')
   , d3 = require('d3')
-  , base = require('./base')
+  , base = require('./d3by5-base-chart')
 ;
 
 module.exports = HorisontalBarGraph;
@@ -13,6 +13,11 @@ module.exports = HorisontalBarGraph;
 function HorisontalBarGraph () {
 
   var chart = {
+    // enumish
+    HORIZONTAL: 'horizontal',
+    VERTICAL: 'vertical',
+
+
     options: {
         padding: 2
     },
@@ -65,6 +70,22 @@ function HorisontalBarGraph () {
           });
 
     },
+
+    /**
+     * Sets the direction of the graph
+     * @param  {String} value - the direction used, allowed values = this.HORIZONTAL | this.VERTICAL
+     * @return {Mixed}        - the value or chart
+     */
+    direction: function (value) {
+      if (!arguments.length) return this.options.directions;
+      // wrong value supplied
+      if (value !== this.HORIZONTAL && value !== this.VERTICAL) {
+        console.error(value, 'is invalid. Only ', this.HORIZONTAL, ' or ', this.VERTICAL, 'allowed');
+        return this;
+      }
+      this.options.directions = value;
+      return this;
+    }
 
   };
 
