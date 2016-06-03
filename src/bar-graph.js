@@ -1,6 +1,7 @@
 'use:strict';
 var _ = require('underscore')
   , d3 = require('d3')
+  , base = require('./base')
 ;
 
 module.exports = HorisontalBarGraph;
@@ -11,29 +12,39 @@ module.exports = HorisontalBarGraph;
  */
 function HorisontalBarGraph () {
 
-  var options = {};
-  function chart (selection) {
-    // set the dafaults
-    options.padding = 2;
+  var chart = {
+    options: {
+        padding: 2
+    },
 
+    init: function (selection) {
+
+      if (arguments.length) {
+        this.draw(selection);
+      }
+      return this;
+    },
+
+    draw: function (selection) {
+      var that = this;
 
       selection.each(function () {
 
-        var data = _.map(options.data, function (d) {
+        var data = _.map(that.options.data, function (d) {
               return d.values;
             });
 
-        var barSpacing  = options.height / options.data.length;
-        var barHeight   = barSpacing - options.padding;
+        var barSpacing  = that.options.height / that.options.data.length;
+        var barHeight   = barSpacing - that.options.padding;
         var maxValue    = d3.max(data);
-        var widthScale  = options.width / maxValue;
+        var widthScale  = that.options.width / maxValue;
 
 
         var dom = d3.select(this);
         var svg = dom.append('svg')
             .attr('class', 'chart barchart')
-            .attr('height', options.height)
-            .attr('width', options.width);
+            .attr('height', that.options.height)
+            .attr('width', that.options.width);
 
         var bars = svg.selectAll('rect.chart__bar')
             .data(data)
@@ -45,76 +56,19 @@ function HorisontalBarGraph () {
             .attr('x', 0)
             .attr('width', function (d) { return d * widthScale; })
             .attr('fill', function (d, i) {
-              var data = options.data[i];
+              var data = that.options.data[i];
               if (data && data.color) {
                 return data.color;
               }
-              return options.fillColor;
+              return that.options.fillColor;
             });
+          });
 
-      });
-    }
+    },
 
+  };
 
-    chart.fillColor = function (value) {
-      if (!arguments.length) return options.fillColor;
-      options.fillColor = value;
-      return chart;
-    };
+  chart = _.extend(chart, base);
+  return (chart.init());
 
-    /**
-     * Sets the chart-padding
-     * @param  {Number} value - the padding of the chart
-     * @return {Mixed}        - the value or chart
-     */
-    chart.padding = function (value) {
-      if (!arguments.length) return options.padding;
-      options.padding = value;
-      return chart;
-    };
-
-    /**
-     * Sets the width of a chart
-     * @param  {Number} value - the width of the chart
-     * @return {Mixed}        - the value or this
-     */
-    chart.width = function (value) {
-      if (!arguments.length) return options.width;
-      options.width = value;
-      return chart;
-    };
-    /**
-     * Sets the height of a chart
-     * @param  {Number} value - the height of the chart
-     * @return {Mixed}        - the value or chart
-     */
-    chart.height = function (value) {
-      if (!arguments.length) return options.height;
-      options.height = value;
-      return chart;
-    };
-    /**
-     * Sets the data on a chart
-     * @param  {Number} value - the data used to draw the chart
-     * @return {Mixed}        - the value or chart
-     */
-    chart.data = function  (value) {
-      if (!arguments.length) return options.data;
-      options.data = value;
-      return chart;
-    };
-
-    /**
-     * Sets a listener on the clices of the chart
-     * @param  {String} action    - the type of action to listen to ( ie. 'click', 'mouseover')
-     * @param  {Function} method  -  A bound method to be called when the action is invoked, passes the datum for this specific slice
-     * @return {Mixed}            - the value or chart
-     */
-    chart.on = function (action, method) {
-      if (!arguments.length) return options.on;
-      options.on = {action: action, method: method};
-      return chart;
-    };
-
-  return chart;
 }
