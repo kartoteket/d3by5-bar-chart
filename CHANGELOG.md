@@ -3,17 +3,19 @@ All notable changes to this project will be documented in this file.
 This project adheres (well, maybe not quite) to [Semantic Versioning](http://semver.org/).
 
 
-
-
-## [UNRELEASED]
+## [Unreleased]
 ### Added
-- Added README with initial API definition
-- Added submodule 'base' with base graph
-- Added initial 'pie-chart' code for testing
+- Added posibility to set directions (horisontal | vertical)
 
-### Removed
-- Removed submodule 'base' with base graph
+## Changed
+- More details in the README
 
+## [0.0.1] - 2016-06-01
+### Added
+- Cloned over the pie chart repo and adjusted
+
+### Changed
+- Updated README
 
 [//]: ##############################################
 <!---
