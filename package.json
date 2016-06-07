@@ -1,5 +1,5 @@
 {
-  "name": "d3by5-horisontal-bar-graph",
+  "name": "d3by5-bar-graph",
   "version": "0.0.1",
   "description": "A d3 implementation of horisontal bar graphs",
   "main": "src/bar-graph.js",
