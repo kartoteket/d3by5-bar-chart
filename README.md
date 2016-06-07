@@ -1,5 +1,5 @@
-# d3by5-horisontal-bar-graph
-The d3by5-horisontal-bar-graph is part of the d3by5 graph tools, this specific package will draw a pie chart based on Mike Bostocks [Towards Reusable Charts](https://bost.ocks.org/mike/chart/)
+# d3by5-bar-graph
+The d3by5-bar-graph is part of the d3by5 graph tools, this specific package will draw a pie chart based on Mike Bostocks [Towards Reusable Charts](https://bost.ocks.org/mike/chart/)
 
 ## NOTE
 This is an internal project, you are probably better off using somethin like [C3](https://github.com/c3js/c3). That said, just give it a try and contact us back if you have any issues (no capslock please).
@@ -45,7 +45,7 @@ will get you everything else you need
 All methods are chained, you can simply instanciate a new bar graph like this
 
 ```javascript
-var bar = require('d3by5-horisontal-bar-graph');
+var bar = require('d3by5-bar-graph');
 
 var bargraph = bargraph()
                     .width(500)
