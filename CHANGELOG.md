@@ -5,7 +5,7 @@ This project adheres (well, maybe not quite) to [Semantic Versioning](http://sem
 
 ## [Unreleased]
 ### Added
-- Added posibility to set directions (horisontal | vertical)
+- Added posibility to set anchors ('top' | 'bottom' | 'left' | 'right')
 
 ## Changed
 - More details in the README
