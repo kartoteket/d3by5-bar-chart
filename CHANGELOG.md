@@ -9,6 +9,7 @@ This project adheres (well, maybe not quite) to [Semantic Versioning](http://sem
 
 ## Changed
 - More details in the README
+- Refactored, creating a single barOptions for positions and dimensions of bars
 
 ## [0.0.1] - 2016-06-01
 ### Added
