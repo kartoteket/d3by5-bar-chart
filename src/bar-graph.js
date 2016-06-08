@@ -2,50 +2,59 @@
 var _ = require('underscore')
   , d3 = require('d3')
   , base = require('d3by5-base-chart')
+  , barOptions = require('./barOptions')
 ;
 
-module.exports = HorisontalBarGraph;
+module.exports = BarGraph;
 
 /**
  * The entrypoint
  * @return {[type]} [description]
  */
-function HorisontalBarGraph () {
+function BarGraph () {
 
   var chart = {
     // enumish
-    HORIZONTAL: 'horizontal',
-    VERTICAL: 'vertical',
-
+    ANCHOR_LEFT: 'left',
+    ANCHOR_RIGHT: 'right',
+    ANCHOR_BOTTOM: 'bottom',
+    ANCHOR_TOP: 'top',
 
     options: {
-        padding: 2
+        padding: 2,
+        direction: 'left',
+        chartClass: 'chart-bar',
+        labelPosition: 'none'
     },
 
     init: function (selection) {
 
       if (arguments.length) {
-        this.draw(selection);
+        this.selection = selection;
+        this.draw();
       }
       return this;
     },
 
-    draw: function (selection) {
-      var that = this;
+    draw: function () {
+      var that = this
+        , barPositions = this.getBarPositions()
+        , barDimensions = this.getBarDimensions()
+        , barDefaultOptions = this.getBarDefaultOptions()
+      ;
 
-      selection.each(function () {
 
-        var data = _.map(that.options.data, function (d) {
-              return d.values;
-            });
 
-        var barSpacing  = that.options.height / that.options.data.length;
-        var barHeight   = barSpacing - that.options.padding;
-        var maxValue    = d3.max(data);
-        var widthScale  = that.options.width / maxValue;
 
+      this.selection.each(function() {
 
         var dom = d3.select(this);
+
+        // remove old
+        if (dom.select('svg')) {
+          dom.select('svg').remove();
+        }
+
         var svg = dom.append('svg')
             .attr('class', 'chart barchart')
             .attr('height', that.options.height)
@@ -55,40 +64,46 @@ function HorisontalBarGraph () {
             .data(data)
             .enter()
             .append('rect')
-            .attr('class', 'chart__bar')
-            .attr('y', function (d, i) { return i * barSpacing;  })
-            .attr('height', barHeight)
-            .attr('x', 0)
-            .attr('width', function (d) { return d * widthScale; })
-            .attr('fill', function (d, i) {
-              var data = that.options.data[i];
-              if (data && data.color) {
-                return data.color;
-              }
-              return that.options.fillColor;
-            });
-          });
+            .attr(_.extend(barPositions, barDimensions, barDefaultOptions));
+      });
 
+      // sets a method to allow redrawing
+      this.onAnchorChange = function () {
+        this.draw();
+      };
     },
+
 
     /**
      * Sets the direction of the graph
-     * @param  {String} value - the direction used, allowed values = this.HORIZONTAL | this.VERTICAL
+     * @param  {String} value - the direction used, allowed values = ANCHOR_LEFT | ANCHOR_RIGHT | ANCHOR_BOTTOM | ANCHOR_TOP
      * @return {Mixed}        - the value or chart
      */
-    direction: function (value) {
-      if (!arguments.length) return this.options.directions;
+    anchor: function (value) {
+      if (!arguments.length) return this.options.anchor;
+
+      value = String(value).toLowerCase();
       // wrong value supplied
-      if (value !== this.HORIZONTAL && value !== this.VERTICAL) {
-        console.error(value, 'is invalid. Only ', this.HORIZONTAL, ' or ', this.VERTICAL, 'allowed');
+      if (value !== this.ANCHOR_LEFT &&
+          value !== this.ANCHOR_RIGHT &&
+          value !== this.ANCHOR_TOP &&
+          value !== this.ANCHOR_BOTTOM) {
+        console.error(value, 'is invalid. Only ', this.ANCHOR_LEFT, ', ', this.ANCHOR_RIGHT, ', ', this.ANCHOR_TOP, ' or ', this.ANCHOR_BOTTOM, 'allowed');
         return this;
       }
-      this.options.directions = value;
+      this.options.anchor = value;
+
+      // redraw if the graph has been loaded
+      if (typeof this.onAnchorChange === 'function') {
+        this.onAnchorChange();
+      }
+
       return this;
-    }
+    },
 
   };
 
+  chart = _.extend(chart, barOptions);
   chart = _.extend(chart, base);
   return (chart.init());
 

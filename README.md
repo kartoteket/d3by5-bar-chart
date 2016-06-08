@@ -38,7 +38,7 @@ will get you everything else you need
 ### Optional
 * fillColor - String/hex: the fillcolor (defaults to 'coral')
 * padding - Number: the padding to use (detaults to 2)
-* direction - String: the direction of the graph ('horizontal' | 'vertical') (defaults to ('horizontal'))
+* anchor - String: the direction of the graph from where it is achored ('top' | 'bottom' | 'left' | 'right') (defaults to ('bottom'))
 
 
 ## EXAMPLE
