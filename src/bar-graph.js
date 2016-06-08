@@ -2,8 +2,7 @@
 var _ = require('underscore')
   , d3 = require('d3')
   , base = require('d3by5-base-chart')
-  , horizontal = require('./horizontal-graph')
-  , vertical = require('./vertical-graph')
+  , barOptions = require('./barOptions')
 ;
 
 module.exports = BarGraph;
@@ -25,6 +24,7 @@ function BarGraph () {
         padding: 2,
         direction: 'left',
         chartClass: 'chart-bar',
+        labelPosition: 'none'
     },
 
     init: function (selection) {
@@ -38,28 +38,11 @@ function BarGraph () {
 
     draw: function () {
       var that = this
-        , graphOptions
-        // , data
+        , barPositions = this.getBarPositions()
+        , barDimensions = this.getBarDimensions()
+        , barDefaultOptions = this.getBarDefaultOptions()
       ;
 
-      // define the anchoring of the graph
-      if (this.options.anchor === this.ANCHOR_LEFT || this.options.anchor === this.ANCHOR_RIGHT) {
-        graphOptions = this.horizontalOptions();
-      }
-
-      else if (this.options.anchor === this.ANCHOR_BOTTOM || this.options.anchor === this.ANCHOR_TOP) {
-        graphOptions = this.verticalOptions();
-      }
-
-      // merge graphOptions with the default options
-      // fill is not dependednt on direction
-      graphOptions.fill = function (d, i) {
-                            var _data = that.options.data[i];
-                            if (_data && _data.color) {
-                              return _data.color;
-                            }
-                            return that.options.fillColor;
-                          };
 
 
 
@@ -81,8 +64,7 @@ function BarGraph () {
             .data(data)
             .enter()
             .append('rect')
-            .attr(graphOptions);
-
+            .attr(_.extend(barPositions, barDimensions, barDefaultOptions));
       });
 
       // sets a method to allow redrawing
@@ -90,6 +72,7 @@ function BarGraph () {
         this.draw();
       };
     },
+
 
     /**
      * Sets the direction of the graph
@@ -112,7 +95,7 @@ function BarGraph () {
 
       // redraw if the graph has been loaded
       if (typeof this.onAnchorChange === 'function') {
-        this.draw();
+        this.onAnchorChange();
       }
 
       return this;
@@ -120,8 +103,7 @@ function BarGraph () {
 
   };
 
-  chart = _.extend(chart, vertical);
-  chart = _.extend(chart, horizontal);
+  chart = _.extend(chart, barOptions);
   chart = _.extend(chart, base);
   return (chart.init());
 
