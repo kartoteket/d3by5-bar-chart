@@ -3,6 +3,7 @@ var _ = require('underscore')
   , d3 = require('d3')
   , base = require('d3by5-base-chart')
   , barOptions = require('./barOptions')
+  , labelOptions = require('./labelOptions')
 ;
 
 module.exports = BarGraph;
@@ -20,11 +21,16 @@ function BarGraph () {
     ANCHOR_BOTTOM: 'bottom',
     ANCHOR_TOP: 'top',
 
+    LABEL_INSIDE: 'inside',
+    LABEL_OUTSIDE: 'outside',
+    LABEL_FIT: 'fit',
+    LABEL_NONE: 'none',
+
     options: {
         padding: 2,
         direction: 'left',
         chartClass: 'chart-bar',
-        labelPosition: 'none'
+        labelPosition: 'fit'
     },
 
     init: function (selection) {
@@ -37,10 +43,17 @@ function BarGraph () {
     },
 
     draw: function () {
+
+      // global accessible max
+      this.maxValue = d3.max(this.options.data, function (d) {
+                        return d.values;
+                      });
+
       var that = this
-        , barPositions = this.getBarPositions()
-        , barDimensions = this.getBarDimensions()
-        , barDefaultOptions = this.getBarDefaultOptions()
+        , _barPositions = this.getBarPositions()
+        , _barDimensions = this.getBarDimensions()
+        , _barDefaultOptions = this.getBarDefaultOptions()
+        , _labelOptions
       ;
 
 
@@ -51,21 +64,52 @@ function BarGraph () {
         var dom = d3.select(this);
 
         // remove old
-        if (dom.select('svg')) {
-          dom.select('svg').remove();
+        if (that.svg) {
+          that.svg.remove();
         }
 
-        var svg = dom.append('svg')
+        //
+        // The main svg element
+        //
+        that.svg = dom.append('svg')
             .attr('class', 'chart barchart')
             .attr('height', that.options.height)
             .attr('width', that.options.width);
 
-        var bars = svg.selectAll('rect.chart__bar')
+        // The actual bars
+        var bars = that.svg.selectAll('rect.chart__bar')
             .data(data)
             .enter()
             .append('rect')
-            .attr(_.extend(barPositions, barDimensions, barDefaultOptions));
+            .attr(_.extend(_barPositions, _barDimensions, _barDefaultOptions))
+            .attr('id', function (d) {
+              return d.id;
+            });
+
+
+        // Draw labels if required
+        if (that.options.labelPosition !== that.LABEL_NONE) {
+          that.drawLabels();
+        }
       });
+
+
+
+
+
+
+
+        //                   
+        //                   
+    // getLabelOptions: function () {
+
+    // },
+
+
+
+
+
+
 
       // sets a method to allow redrawing
       this.onAnchorChange = function () {
@@ -101,9 +145,35 @@ function BarGraph () {
       return this;
     },
 
+    /**
+     * Turns the labels on and off by fixin them
+     * @param  {String} value - the position of labels or null (this.LABEL_INSIDE| this.LABEL_OUTSIDE | this.LABEL_FIT | this.LABEL_NONE)
+     *                          labels will be positioned separately on the 
+     * @return {Mixed}        - the value or chart
+     */
+    label: function () {
+      if (!arguments.length) return this.options.labelPosition;
+
+      value = String(value).toLowerCase();
+      // wrong value supplied
+      if (value !== this.LABEL_INSIDE &&
+          value !== this.LABEL_OUTSIDE &&
+          value !== this.LABEL_FIT  &&
+          value !== this.LABEL_NONE) {
+        console.error(value, 'is invalid. Only ', this.LABEL_INSIDE, ', ', this.LABEL_OUTSIDE, ', ', this.LABEL_FIT, ' or ', this.LABEL_NONE, 'allowed');
+      }
+      this.options.labelPosition = value;
+
+      // redraw if the graph has been loaded
+      if (typeof this.onLabelChange === 'function') {
+        this.onLabelChange();
+      }
+      return this;
+    }
   };
 
   chart = _.extend(chart, barOptions);
+  chart = _.extend(chart, labelOptions);
   chart = _.extend(chart, base);
   return (chart.init());
 
