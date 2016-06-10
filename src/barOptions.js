@@ -15,13 +15,8 @@ barOptions.getBarPositions = function () {
     , that = this
     , horizontalGrid  = this.options.width / this.options.data.length // width available to horizontal bars
     , verticalGrid    = this.options.height / this.options.data.length // width available to vertical bars
-    , maxValue        = d3.max(this.options.data, function (d) {
-                          return d.values;
-                        })
-    , heightScale     = this.options.height / maxValue
-    , widthScale      = this.options.width / maxValue
-    , barThickness
-    , barLength
+    , heightScale     = this.options.height / this.maxValue
+    , widthScale      = this.options.width / this.maxValue
   ;
 
 
@@ -80,11 +75,8 @@ barOptions.getBarDimensions = function () {
     , that = this
     , horizontalGrid  = this.options.width / this.options.data.length // width available to horizontal bars
     , verticalGrid    = this.options.height / this.options.data.length // width available to vertical bars
-    , maxValue        = d3.max(this.options.data, function (d) {
-                          return d.values;
-                        })
-    , heightScale     = this.options.height / maxValue
-    , widthScale      = this.options.width / maxValue
+    , heightScale     = this.options.height / this.maxValue
+    , widthScale      = this.options.width / this.maxValue
   ;
 
   // Horizontal

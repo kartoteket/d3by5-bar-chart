@@ -6,6 +6,7 @@ This project adheres (well, maybe not quite) to [Semantic Versioning](http://sem
 ## [Unreleased]
 ### Added
 - Added posibility to set anchors ('top' | 'bottom' | 'left' | 'right')
+- Added inline labels to match the anchoring
 
 ## Changed
 - More details in the README
