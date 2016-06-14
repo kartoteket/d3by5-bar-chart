@@ -24,10 +24,10 @@ Theree dependencies in package.json
 * d3
 * d3by5-base-chart. The base-chart is not an npm module, get it [here](https://github.com/kartoteket/d3by5-base-chart) The package json looks for it in the sibling repo, and attempts for link it, You can change that in the Package json
 ```json
-"scripts": [
+"scripts": {
     "preinstall": "npm link ../d3by5-base-chart",
     "preupdate": "npm link ../d3by5-base-chart"
-]
+}
 ```
 
 After updating linkage
