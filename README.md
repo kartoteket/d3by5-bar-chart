@@ -22,23 +22,24 @@ A browserified and uglified version with all dependencies included. Use this if 
 Theree dependencies in package.json
 * Underscore
 * d3
-* file:./d3by5-base-chart. The base-chart is not an npm module, get it [here](https://github.com/kartoteket/d3by5-base-chart) and drop it next to the bar graph, or use some form of shimming tool like [aliasify] (https://www.npmjs.com/package/aliasify)
+* d3by5-base-chart. The base-chart is not an npm module, get it [here](https://github.com/kartoteket/d3by5-base-chart) The package json looks for it in the sibling repo, and attempts for link it, You can change that in the Package json
+```json
+"scripts": [
+    "preinstall": "npm link ../d3by5-base-chart",
+    "preupdate": "npm link ../d3by5-base-chart"
+]
+```
 
+After updating linkage
 ```
 npm install
 ```
 will get you everything else you need
 
 ## API
-### Required
-* width  - Number: the height of the chart
-* height - Number: the width of the chart
-* data   - Array: the data that produces the chart, [{label: String, value: Number}, {xx}]
-
-### Optional
-* fillColor - String/hex: the fillcolor (defaults to 'coral')
-* padding - Number: the padding to use (detaults to 2)
-* anchor - String: the direction of the graph from where it is achored ('top' | 'bottom' | 'left' | 'right') (defaults to ('bottom'))
+The bar chart uses the [Base chart][https://github.com/kartoteket/d3by5-base-chart] for all getters and setters, and adds the following methods for manipulating view and state.
+* **anchor** - {String} - the direction of the graph from where it is achored ('top' | 'bottom' | 'left' | 'right') (defaults to ('bottom'))
+* **label** - {String} - where to position the labels ('fit' | 'none' | 'axis')
 
 
 ## EXAMPLE
