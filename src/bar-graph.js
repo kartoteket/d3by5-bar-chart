@@ -4,6 +4,7 @@ var _ = require('underscore')
   , base = require('d3by5-base-chart')
   , barOptions = require('./barOptions')
   , labelOptions = require('./labelOptions')
+  , barPositions = require('./barPositions')
 ;
 
 module.exports = BarGraph;
@@ -21,6 +22,9 @@ function BarGraph () {
     ANCHOR_BOTTOM: 'bottom',
     ANCHOR_TOP: 'top',
 
+    BARLAYOUT_STACKED: 'stacked',
+    BARLAYOUT_GROUPED: 'grouped',
+
     LABEL_INSIDE: 'inside',
     LABEL_OUTSIDE: 'outside',
     LABEL_FIT: 'fit',
@@ -31,7 +35,8 @@ function BarGraph () {
         anchor: 'right',
         chartClass: 'chart-bar',
         labelPosition: 'none',
-        idPrefix: 'bar-'
+        idPrefix: 'bar-',
+        barLayout: 'grouped'
     },
 
     init: function (selection) {
@@ -44,86 +49,62 @@ function BarGraph () {
     },
 
     draw: function () {
-      var that = this;
-      // global accessible max
-      this.maxValue = d3.max(this.options.data, function (d) {
-                        if (that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL) {
-                          return d3.max(d.values, function (d2) {
-                            return d2.values;
-                          });
-                        }
-                        return d.values;
-      });
-
-      var lengthRange = this.getLengthRange()
-        , breadthRange = this.getBreadthRange()
+      var that = this
         , length
         , breadth
         , multiBreadth
         , _labelOptions
         , positions = {}
         , dimensions = {}
+
+        , useGroupedData = (that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL && that.options.barLayout === 'grouped')
+        , useStackedData = (that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL && that.options.barLayout === 'stacked')
       ;
+      // force a value for the dataType if there is a multi dimensional dataset
+      this.options.barLayout = (that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL) ? this.options.barLayout || this.BARLAYOUT_GROUPED : null;
 
-      length = d3.scale.linear()
-                        .domain([0, this.maxValue])
-                        .range(lengthRange);
-
-      breadth = d3.scale.ordinal()
-                        .domain(_.map(that.options.data, function (d) {
-                          return d.label;
-                        }))
-                        .rangeRoundBands(breadthRange, 0.1);
-
+      this.maxValue = this.getMaxValue();
+      this.breadthScale = this.getBreadthScale();
+      this.lengthScale = this.getLengthScale();
 
       //
-      // Add a sub category for multi-dimensional data
+      // Create a grouped breadth scale and update the dataset 
       //
       if (that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL) {
-        multiBreadth = d3.scale.ordinal()
-                              .domain(_.map(_.first(that.options.data).values, function (d) {
-                                    return d.label;
-                                  }))
-                              .rangeRoundBands([breadth.rangeBand(), 0]);
+        this.groupedBreadthScale = this.getGroupedBreadthScale();
+
+        if (that.options.barLayout === this.BARLAYOUT_STACKED) {
+          var lpos;
+          _.each(that.options.data, function (data) {
+            lpos = 0;
+            data.values = _.map(data.values, function (d) {
+                            lpos +=  d.values;
+                            d.lpos = lpos;
+                            return d;
+                          });
+          });
+        }
       }
 
 
-
-      //
-      // Set the bar positions to x and y depending on their anchor and the datatype
-      //
-      if (this.isVertical()) {
-        positions.x = function(d) {
-                        return that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL ? multiBreadth(d.label) : 0;
-                      };
-        positions.y = function(d) {
-                        return that.options.anchor === that.ANCHOR_TOP ? that.options.margin.top : that.getCalculatedHeight() - length(d.values);
-                      };
-      } else {
-        positions.x = function(d) {
-                        return that.options.anchor === that.ANCHOR_LEFT ? 0 : that.getCalculatedWidth() - length(d.values);
-                      };
-        positions.y = function(d) {
-                        return that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL ? multiBreadth(d.label) : 0;
-                      };
-      }
-
+      positions.x = this.getBarXPos();
+      positions.y = this.getBarYPos();
       //
       // Set dimensions
       //
       if (this.isVertical()) {
         dimensions.width = function (d) {
-                              return that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL ? multiBreadth.rangeBand() : breadth.rangeBand();
+                              return useGroupedData ? that.groupedBreadthScale.rangeBand() : that.breadthScale.rangeBand();
                             };
         dimensions.height = function(d) {
-                              return length(d.values);
+                              return that.lengthScale(d.values);
                             };
       } else {
         dimensions.width = function (d) {
-                              return length(d.values);
+                              return that.lengthScale(d.values);
                             };
         dimensions.height = function(d) {
-                              return that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL ? multiBreadth.rangeBand() : breadth.rangeBand();
+                              return useGroupedData ? that.groupedBreadthScale.rangeBand() : that.breadthScale.rangeBand();
                             };
       }
 
@@ -150,8 +131,8 @@ function BarGraph () {
             .enter()
             .append('g')
             .attr('transform', function (d) {
-              var _x = that.isVertical() ? breadth(d.label) : that.options.margin[that.options.anchor]
-                , _y = that.isVertical() ? that.options.margin.top : breadth(d.label)
+              var _x = that.isVertical() ? that.breadthScale(d.label) : that.options.margin[that.options.anchor]
+                , _y = that.isVertical() ? that.options.margin.top : that.breadthScale(d.label)
               ;
               return 'translate(' + _x + ',' + _y +')';
             });
@@ -170,6 +151,8 @@ function BarGraph () {
             .style("fill", function(d) {
               return d.color;
             });
+
+
         }
         //
         // Single dimension just sets the barse
