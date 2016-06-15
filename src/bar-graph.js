@@ -278,8 +278,13 @@ function BarGraph () {
     }
   };
 
+
   chart = _.extend(chart, barOptions);
+  chart = _.extend(chart, barPositions);
   chart = _.extend(chart, labelOptions);
+// keep the options clean
+  chart.options = _.extend(chart.options, base.options);
+  base = _.omit(base, 'options');
   chart = _.extend(chart, base);
   return (chart.init());
 
