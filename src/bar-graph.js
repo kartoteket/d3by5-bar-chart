@@ -5,6 +5,7 @@ var _ = require('underscore')
   , barOptions = require('./barOptions')
   , labelOptions = require('./labelOptions')
   , barPositions = require('./barPositions')
+  , barDimensions = require('./barDimensions')
 ;
 
 module.exports = BarGraph;
@@ -50,15 +51,8 @@ function BarGraph () {
 
     draw: function () {
       var that = this
-        , length
-        , breadth
-        , multiBreadth
-        , _labelOptions
         , positions = {}
         , dimensions = {}
-
-        , useGroupedData = (that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL && that.options.barLayout === 'grouped')
-        , useStackedData = (that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL && that.options.barLayout === 'stacked')
       ;
       // force a value for the dataType if there is a multi dimensional dataset
       this.options.barLayout = (that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL) ? this.options.barLayout || this.BARLAYOUT_GROUPED : null;
@@ -89,24 +83,8 @@ function BarGraph () {
 
       positions.x = this.getBarXPos();
       positions.y = this.getBarYPos();
-      //
-      // Set dimensions
-      //
-      if (this.isVertical()) {
-        dimensions.width = function (d) {
-                              return useGroupedData ? that.groupedBreadthScale.rangeBand() : that.breadthScale.rangeBand();
-                            };
-        dimensions.height = function(d) {
-                              return that.lengthScale(d.values);
-                            };
-      } else {
-        dimensions.width = function (d) {
-                              return that.lengthScale(d.values);
-                            };
-        dimensions.height = function(d) {
-                              return useGroupedData ? that.groupedBreadthScale.rangeBand() : that.breadthScale.rangeBand();
-                            };
-      }
+      dimensions.width = this.getBarWidth();
+      dimensions.height = this.getBarHeight();
 
       this.selection.each(function() {
 
@@ -264,6 +242,7 @@ function BarGraph () {
 
   chart = _.extend(chart, barOptions);
   chart = _.extend(chart, barPositions);
+  chart = _.extend(chart, barDimensions);
   chart = _.extend(chart, labelOptions);
 // keep the options clean
   chart.options = _.extend(chart.options, base.options);
