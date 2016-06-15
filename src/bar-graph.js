@@ -189,28 +189,38 @@ function BarGraph () {
         }
       });
 
-
-
-
-
-
-
-        //                   
-        //                   
-    // getLabelOptions: function () {
-
-    // },
-
-
-
-
-
-
+      this.onBarLayoutChange = function () {
+        this.draw();
+      };
 
       // sets a method to allow redrawing
       this.onAnchorChange = function () {
         this.draw();
       };
+    },
+
+    /**
+     * Sets the layout of the chart
+     * @param  {String} value - the type of layout to use allowed values = BARLAYOUT_GROUPED | BARLAYOUT_STACKED
+     * @return {Mixed}        - the value or chart
+     */
+    barLayout: function (value) {
+      if (!arguments.length) return this.options.barLayout;
+
+      value = String(value).toLowerCase();
+      // wrong value supplied
+      if (value !== this.BARLAYOUT_GROUPED &&
+          value !== this.BARLAYOUT_STACKED) {
+        console.error(value, 'is invalid. Only ', this.BARLAYOUT_STACKED, ' OR ', this.BARLAYOUT_GROUPED, ' allowed');
+        return this;
+      }
+      this.options.barLayout = value;
+      // redraw if the graph has been loaded
+      if (typeof this.onBarLayoutChange === 'function') {
+        this.onBarLayoutChange();
+      }
+
+      return this;
     },
 
     /**
