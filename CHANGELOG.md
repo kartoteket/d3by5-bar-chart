@@ -7,11 +7,14 @@ This project adheres (well, maybe not quite) to [Semantic Versioning](http://sem
 ### Added
 - Added posibility to set anchors ('top' | 'bottom' | 'left' | 'right')
 - Added inline labels to match the anchoring
-- Addad support for grouped bars
+- Added support for grouped bars
+- Added supportr for stacked bars
 
 ## Changed
 - More details in the README
 - Refactored, creating a single barOptions for positions and dimensions of bars
+- Refactored, bar positions as separate class
+- Refactored, dimensions as separate class
 
 ## [0.0.1] - 2016-06-01
 ### Added

@@ -40,6 +40,7 @@ will get you everything else you need
 The bar chart uses the [Base chart](https://github.com/kartoteket/d3by5-base-chart) for all getters and setters, and adds the following methods for manipulating view and state.
 * **anchor** - {String} - the direction of the graph from where it is achored ('top' | 'bottom' | 'left' | 'right') (defaults to ('bottom'))
 * **label** - {String} - where to position the labels ('fit' | 'none' | 'axis')
+* **barLayout** - {String} - how to display multiple series ('stacked' | 'grouped')
 
 
 ## EXAMPLE
