@@ -115,7 +115,7 @@ function BarGraph () {
             .append('g')
             .attr("id", function(d){return d.id;})
             .attr('transform', function (d) {
-              var _x = that.isVertical() ? that.breadthScale(d.label) : that.options.margin[that.options.anchor]
+              var _x = that.options.margin.left + (that.isVertical() ? that.breadthScale(d.label) : 0)
                 , _y = that.isVertical() ? that.options.margin.top : that.breadthScale(d.label)
               ;
               return 'translate(' + _x + ',' + _y +')';
