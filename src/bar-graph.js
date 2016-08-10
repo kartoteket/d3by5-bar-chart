@@ -28,7 +28,7 @@ function BarGraph () {
 
     LABEL_INSIDE: 'inside',
     LABEL_OUTSIDE: 'outside',
-    LABEL_FIT: 'fit',
+    LABEL_FIT: 'fit',         // TODO: Not in use ??!?
     LABEL_NONE: 'none',
 
     options: {
@@ -36,6 +36,11 @@ function BarGraph () {
         anchor: 'right',
         chartClass: 'chart-bar',
         labelPosition: 'none',
+        labelAlign: 'left',
+        labelColor: '#000',
+        valuesPosition: 'none',
+        valuesAlign: 'left',
+        valuesColor: '#000',
         idPrefix: 'bar-',
         barLayout: 'grouped'
     },
