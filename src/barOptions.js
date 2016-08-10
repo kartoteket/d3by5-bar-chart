@@ -23,7 +23,8 @@ barOptions.getBreadthScale = function () {
   if (this.isVertical()) {
     bRange = [0 , this.getCalculatedWidth()];
   } else {
-    bRange = [this.options.margin.left, this.options.width - this.options.margin.right];
+    // bRange = [this.options.margin.left, this.options.width - this.options.margin.right];
+    bRange = [this.options.margin.top, this.options.height - this.options.margin.bottom]; // if horisontal the "breadth" equals the height and must be caluculad from vertical dimensions
   }
 
   //
