@@ -226,29 +226,42 @@ function BarGraph () {
     labelPosition: function (value) {
       if (!arguments.length) return this.options.labelPosition;
 
-      value = String(value).toLowerCase();
-      // wrong value supplied
-      if (value !== this.LABEL_INSIDE &&
-          value !== this.LABEL_OUTSIDE &&
-          value !== this.LABEL_FIT  &&
-          value !== this.LABEL_NONE) {
-        console.error(value, 'is invalid. Only ', this.LABEL_INSIDE, ', ', this.LABEL_OUTSIDE, ', ', this.LABEL_FIT, ' or ', this.LABEL_NONE, 'allowed');
-      }
-      this.options.labelPosition = value;
+      this.validateOption('labelPosition', value, [this.LABEL_INSIDE, this.LABEL_OUTSIDE, this.LABEL_FIT , this.LABEL_NONE]);
 
       // redraw if the graph has been loaded
       if (typeof this.onLabelChange === 'function') {
         this.onLabelChange();
       }
       return this;
+    /**
+     * TODO: IF this shit works and is useful, move to base utils or somwhere like that
+     * A validator that checks if input to option setter is valid. Aborts with console error if not
+     * @param  {string} option  the option to be set
+     * @param  {string} value   the value to be set
+     * @param  {array}  domain  options valid domain of values
+     * @return {bool}           returns true or false
+     */
+    validateOption: function(option, value, domain) {
+
+      value = String(value).toLowerCase();
+
+      if(_.contains(domain, value)) {
+        this.options[option] = value;
+        return true;
+      }
+      console.error('Error setting ' + option +': "' + value, '" is invalid. Valid input is: "' + domain.join('", "') +'"');
+      return false;
     }
+
   };
+
 
 
   chart = _.extend(chart, barOptions);
   chart = _.extend(chart, barPositions);
   chart = _.extend(chart, barDimensions);
   chart = _.extend(chart, labelOptions);
+
 // keep the options clean
   chart.options = _.extend(chart.options, base.options);
   base = _.omit(base, 'options');
