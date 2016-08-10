@@ -64,6 +64,10 @@ barPositions.getLengthPos = function () {
                 return 0;
               }
 
+              if (that.options.anchor === that.ANCHOR_RIGHT ) {
+                return that.getCalculatedWidth() - that.lengthScale(d.values);
+              }
+
               return that.getCalculatedHeight() - that.lengthScale(d.values);
             };
 };
