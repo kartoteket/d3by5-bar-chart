@@ -223,7 +223,7 @@ function BarGraph () {
      *                          labels will be positioned separately on the
      * @return {Mixed}        - the value or chart
      */
-    label: function (value) {
+    labelPosition: function (value) {
       if (!arguments.length) return this.options.labelPosition;
 
       value = String(value).toLowerCase();
