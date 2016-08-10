@@ -233,6 +233,25 @@ function BarGraph () {
         this.onLabelChange();
       }
       return this;
+    },
+
+    labelAlign: function (value) {
+      return arguments.length ? (this.validateOption('labelAlign', value, ['left', 'right', 'top', 'bottom']), this) : this.options.labelAlign;
+    },
+    labelColor: function(value) {
+      return arguments.length ? (this.options.labelColor = value, this) : this.options.labelColor;
+    },
+    valuesPosition: function(value) {
+      return arguments.length ? (this.validateOption('valuesPosition', value, ['inside', 'outside', 'fit', 'none']) , this) : this.options.valuesPosition;
+    },
+    valuesAlign: function(value) {
+      return arguments.length ? (this.validateOption('valuesAlign', value, ['left', 'right']), this) : this.options.valuesAlign;
+    },
+    valuesColor: function(value) {
+      return arguments.length ? (this.options.valuesColor = value, this) : this.options.valuesColor;
+    },
+
+
     /**
      * TODO: IF this shit works and is useful, move to base utils or somwhere like that
      * A validator that checks if input to option setter is valid. Aborts with console error if not
