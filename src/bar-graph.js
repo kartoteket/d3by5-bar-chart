@@ -151,9 +151,12 @@ function BarGraph () {
         }
 
         // Draw labels if required
-        if (that.options.labelPosition !== that.LABEL_NONE) {
+        if (that.options.labelPosition !== that.LABEL_NONE || that.options.valuesPosition !== 'none') {
           that.drawLabels();
         }
+
+
+
       });
 
       this.onBarLayoutChange = function () {

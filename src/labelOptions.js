@@ -17,160 +17,105 @@ labelOptions.drawLabels = function () {
     , positions = {}
   ;
 
+  // rotate verticals by 90
+  rotationHandler = function (d) {
+    return (that.options.anchor === that.ANCHOR_TOP || that.options.anchor === that.ANCHOR_BOTTOM) ? 90 : 0;
+  };
 
-  //
-  // The horizontal anchors share some common featiures
-  // The rotation and y position will be the same for both
-  //
-  // the text anchors and x-pos wil differ in how they are extracted
-  //
-  if (this.options.anchor === this.ANCHOR_RIGHT || this.options.anchor === this.ANCHOR_LEFT) {
 
-    // will look for the bar with the same id as the data node
-    // extract the y-pos and height of the bar to determine the correct y pos
-    yPosHandler = function (d) {
-      var _parent = that.svg.select('#' + d.id)
-        , _n = _parent.node()
-        , _y = parseInt(_n.getAttribute('y'))
-        , _height = parseInt(_n.getAttribute('height'))
-      ;
+  xPosHandler = function (prop, d) {
+    var _rect = that.svg.select('#' + d.id).select('rect')
+      , _bbox = _rect.node().getBBox();
 
-      return _y + (_height * 0.5);
-    };
+    if (that.options.anchor === that.ANCHOR_TOP || that.options.anchor === that.ANCHOR_BOTTOM) {
+      return _bbox.x + (_bbox.width * 0.5);
+    } else {
 
-    // no rotation for horisontals
-    rotationHandler = function (d) {
-      return 0;
-    };
+      // if outside, then force outside
+      if(that.options[prop+'Position'] === that.LABEL_OUTSIDE) {
+        return that.options[prop+'Align'] === 'left' ? that.options.margin.left * -1 : that.width() - that.options.margin.left;
+      }
 
-    //
-    // The right anchored items will position x by bar xpos
-    //
-    if (this.options.anchor === this.ANCHOR_RIGHT) {
-      // if bar covers more than half the width, set text-anchor to start, else set it to end
-      textAnchorHandler = function (d) {
+      if (that.options.anchor === that.ANCHOR_RIGHT) {
+        return (d.values > that.maxValue * 0.5) ? _bbox.x + 10 : _bbox.x - 10;
+      }
+
+      if (that.options.anchor === that.ANCHOR_LEFT) {
+        return (d.values > that.maxValue * 0.5) ? _bbox.width - 10 : _bbox.width + 10;
+      }
+    }
+  };
+
+
+  yPosHandler = function (prop, d) {
+    var _rect = that.svg.select('#' + d.id).select('rect')
+      , _bbox = _rect.node().getBBox();
+
+    if (that.options.anchor === that.ANCHOR_RIGHT || that.options.anchor === that.ANCHOR_LEFT) {
+        return  _bbox.height * 0.5;
+    } else {
+
+      if(that.options[prop+'Position'] === that.LABEL_OUTSIDE) {
+        return that.options[prop+'Align'] === 'top' ? that.options.margin.top * -1 : that.height() - that.options.margin.top;
+      }
+
+      if (that.options.anchor === that.ANCHOR_TOP) {
+        return (d.values > that.maxValue * 0.5) ?  _bbox.height - 10 :  _bbox.height + 10;
+      }
+      if (that.options.anchor === that.ANCHOR_BOTTOM) {
+        return (d.values > that.maxValue * 0.5) ? _bbox.y + 10 : _bbox.y - 10;
+      }
+    }
+  };
+
+
+  textAnchorHandler = function (prop, d) {
+
+    // if outside, then force outside
+    if(that.options[prop+'Position'] === that.LABEL_OUTSIDE) {
+      return (that.options[prop+'Align'] === 'left' || that.options[prop+'Align'] === 'top') ? 'start' : 'end';
+    }
+
+    if (that.options.anchor === that.ANCHOR_RIGHT || that.options.anchor === that.ANCHOR_BOTTOM) {
         return (d.values > that.maxValue * 0.5) ? 'start' : 'end';
-      };
-
-      // will look for the bar with the same id as this datanode id
-      // will extract the x-pos of this node and use it as the xpos
-      // if the anchor is end, subtract 10, else add 10
-      xPosHandler = function (d) {
-        var _parent = that.svg.select('#' + d.id)
-          , _n = _parent.node()
-          , _x = parseInt(_n.getAttribute('x'))
-        ;
-
-        return (d.values > that.maxValue * 0.5) ? _x + 10 : _x - 10;
-      };
     }
-    //
-    // The left anchored items will position by bar width
-    //
-    else if (this.options.anchor === this.ANCHOR_LEFT) {
-      // if bar covers more than half the width, set text-anchor to end, else set it to start
-      textAnchorHandler = function (d) {
+
+    if (that.options.anchor === that.ANCHOR_LEFT || that.options.anchor === that.ANCHOR_TOP) {
         return (d.values > that.maxValue * 0.5) ? 'end' : 'start';
-      };
-
-      // will look for the bar with the same id as this datanode id
-      // will extract the xwidth of this node and use it as the xpos
-      // if the anchor is start, subtract 10, else add 10
-      xPosHandler = function (d) {
-        var _parent = that.svg.select('#' + d.id)
-          , _n = _parent.node()
-          , _x = parseInt(_n.getAttribute('width'))
-        ;
-
-        return (d.values > that.maxValue * 0.5) ? _x - 10 : _x + 10;
-      };
     }
 
+  };
+
+  if (that.options.labelPosition !== that.LABEL_NONE) {
+    var labels = this.svg.selectAll('g')
+                   .data(that.options.data)
+                   .append('text')
+                   .attr('class', 'label')
+                   .text(function (d) {
+                      return d.label;
+                   })
+                   .style('fill', that.options.labelColor )
+                   .style('text-anchor', function (d) {return textAnchorHandler('label', d);})
+                    .attr('transform', function (d) {
+                      return 'translate(' + xPosHandler('label',d) + ',' +  yPosHandler('label', d) + ') rotate (' + rotationHandler() + ', 0 0)';
+                    })
+                   .attr('dy', '0.35em');
   }
 
-  //
-  // The vertical anchors share some properties.
-  // Both will rotate by 90 degrees
-  // both will get their x pos from the x of the corresponding bar
-  //
-  // text anchors and y-pos will differ for both
-  //
-  else if (this.options.anchor === this.ANCHOR_TOP || this.options.anchor === this.ANCHOR_BOTTOM) {
-
-    // rotate verticals by 90
-    rotationHandler = function () {
-      return 90;
-    };
-
-    // will look for the bar with the same id as this datanode id
-    // will extract the xwidth of this node and use it as the xpos
-    // if the anchor is start, subtract 10, else add 10
-    xPosHandler = function (d) {
-      var _parent = that.svg.select('#' + d.id)
-        , _n = _parent.node()
-        , _x = parseInt(_n.getAttribute('x'))
-        , _width = parseInt(_n.getAttribute('width'))
-      ;
-
-      return _x + (_width * 0.5);
-    };
-
-    //
-    // Top anchored items will be anchored by
-    //
-    if (this.options.anchor === this.ANCHOR_TOP) {
-
-      // if bar covers more than half the width, set text-anchor to end, else set it to start
-      textAnchorHandler = function (d) {
-        return (d.values > that.maxValue * 0.5) ? 'end' : 'start';
-      };
-
-      // will look for the bar with the same id as the data node
-      // extract the y-pos and height of the bar to determine the correct y pos
-      yPosHandler = function (d) {
-        var _parent = that.svg.select('#' + d.id)
-          , _n = _parent.node()
-          , _height = parseInt(_n.getAttribute('height'))
-        ;
-
-        return (d.values > that.maxValue * 0.5) ? _height - 10 : _height + 10;
-      };
-    }
-    else if (this.options.anchor === this.ANCHOR_BOTTOM) {
-      // if bar covers more than half the width, set text-anchor to end, else set it to start
-      textAnchorHandler = function (d) {
-        return (d.values > that.maxValue * 0.5) ? 'start' : 'end';
-      };
-
-      // will look for the bar with the same id as the data node
-      // extract the y-pos and height of the bar to determine the correct y pos
-      yPosHandler = function (d) {
-        var _parent = that.svg.select('#' + d.id)
-          , _n = _parent.node()
-          , _y = parseInt(_n.getAttribute('y'))
-        ;
-
-        return (d.values > that.maxValue * 0.5) ? _y + 10 : _y - 10;
-      };
-    }
+  if (that.options.valuesPosition !== 'LABEL_NONE') {
+    var values = this.svg.selectAll('g')
+                   .data(that.options.data)
+                   .append('text')
+                   .attr('class', 'label')
+                   .text(function (d) {
+                      return d.values;
+                   })
+                   .style('fill', that.options.valuesColor )
+                   .style('text-anchor', function (d) {return textAnchorHandler('values', d);})
+                    .attr('transform', function (d) {
+                      return 'translate(' + xPosHandler('values', d) + ',' +  yPosHandler('values',d) + ') rotate (' + rotationHandler() + ', 0 0)';
+                    })
+                   .attr('dy', '0.35em');
   }
-
-  var labels = this.svg.selectAll('.labels')
-                 .data(this.options.data)
-                 .enter()
-                 .append('text')
-                 .text(function (d) {
-                    return d.label;
-                 })
-                 .style('text-anchor', textAnchorHandler)
-                  .attr('transform', function (d) {
-                    return 'translate(' + xPosHandler(d) + ',' + yPosHandler(d) + ') rotate (' + rotationHandler() + ', 0 0)';
-                  })
-                 .attr('dy', '0.35em');
-
-
 
 };
-
-
-
