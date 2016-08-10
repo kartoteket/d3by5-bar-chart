@@ -113,6 +113,7 @@ function BarGraph () {
              .data(that.options.data)
             .enter()
             .append('g')
+            .attr("id", function(d){return d.id;})
             .attr('transform', function (d) {
               var _x = that.isVertical() ? that.breadthScale(d.label) : that.options.margin[that.options.anchor]
                 , _y = that.isVertical() ? that.options.margin.top : that.breadthScale(d.label)
