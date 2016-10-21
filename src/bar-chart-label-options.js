@@ -3,9 +3,30 @@ var _ = require('underscore')
   , d3 = require('d3')
   , labelOptions = {}
 ;
+// define d3by5-base-chart for Node module pattern loaders, including Browserify
+if (typeof module === 'object' && typeof module.exports === 'object') {
+  module.exports = labelOptions;
 
-module.exports = labelOptions;
+// define d3by5_PieChart as an AMD module
+} else if (typeof define === 'function' && define.amd) {
 
+  define(labelOptions);
+
+// define the base in a global namespace d3By5
+}
+
+labelOptions.setFormat = function (prop, value) {
+  var formatter = d3.time.format(value)
+    , output
+  ;
+  // check it for data format
+  // if the format func returns the input, if is messed up
+  if (value === formatter(new Date())) {
+    this.options[prop] = null;
+  } else {
+    this.options[prop] = formatter;
+  }
+};
 
 labelOptions.drawLabels = function () {
 
@@ -23,9 +44,19 @@ labelOptions.drawLabels = function () {
   };
 
 
-  xPosHandler = function (prop, d) {
-    var _rect = that.svg.select('#' + d.id).select('rect')
-      , _bbox = _rect.node().getBBox();
+  xPosHandler = function (prop, d, elem) {
+    var _rect
+      , _bbox
+
+      if(elem.previousSibling) {
+        _bbox = elem.previousSibling.getBBox();
+      } else {
+        console.log('no x sibling');
+        _rect = that.svg.select('#' + d.id).select('rect')
+        _bbox  = _rect.node().getBBox();
+      }
+
+
 
     if (that.options.anchor === that.ANCHOR_TOP || that.options.anchor === that.ANCHOR_BOTTOM) {
       return _bbox.x + (_bbox.width * 0.5);
@@ -47,9 +78,17 @@ labelOptions.drawLabels = function () {
   };
 
 
-  yPosHandler = function (prop, d) {
-    var _rect = that.svg.select('#' + d.id).select('rect')
-      , _bbox = _rect.node().getBBox();
+  yPosHandler = function (prop, d, elem) {
+    var _rect
+      , _bbox
+
+      if(elem.previousSibling) {
+        _bbox = elem.previousSibling.getBBox();
+      } else {
+        console.log('no y sibling');
+        _rect = that.svg.select('#' + d.id).select('rect')
+        _bbox  = _rect.node().getBBox();
+      }
 
     if (that.options.anchor === that.ANCHOR_RIGHT || that.options.anchor === that.ANCHOR_LEFT) {
         return  _bbox.height * 0.5;
@@ -86,23 +125,47 @@ labelOptions.drawLabels = function () {
 
   };
 
+  applyLabelFormat = function (text) {
+    if (that.options.labelFormat) {
+      return that.options.labelFormat(text);
+    }
+    return text;
+  };
+
   if (that.options.labelPosition !== that.LABEL_NONE) {
     var labels = this.svg.selectAll('g')
                    .data(that.options.data)
                    .append('text')
                    .attr('class', 'label')
                    .text(function (d) {
-                      return d.label;
+                      return applyLabelFormat(d.label);
                    })
                    .style('fill', that.options.labelColor )
                    .style('text-anchor', function (d) {return textAnchorHandler('label', d);})
+                   .style('font-size', '0.875rem')
                     .attr('transform', function (d) {
-                      return 'translate(' + xPosHandler('label',d) + ',' +  yPosHandler('label', d) + ') rotate (' + rotationHandler() + ', 0 0)';
+                      return 'translate(' + xPosHandler('label',d, this) + ',' +  yPosHandler('label', d, this) + ') rotate (' + rotationHandler() + ', 0 0)';
                     })
                    .attr('dy', '0.35em');
   }
 
-  if (that.options.valuesPosition !== 'LABEL_NONE') {
+  if (that.options.valuesPosition !== that.LABEL_NONE) {
+
+    if (this.options.dataType === this.DATATYPE_MULTIDIMENSIONAL) {
+      var values = this.svg.selectAll('.barItem')
+                      .append('text')
+                      .attr('class', 'label')
+                      .text(function (d, i) {
+                        return d.values;
+                      })
+                      .style('fill', that.options.valuesColor )
+                      .style('text-anchor', function (d) {return textAnchorHandler('values', d);})
+                      .style('font-size', '0.875rem')
+                      .attr('transform', function (d) {
+                        return 'translate(' + xPosHandler('values', d, this) + ',' +  yPosHandler('values',d, this) + ') rotate (' + rotationHandler() + ', 0 0)';
+                      })
+                      .attr('dy', '0.35em');
+    } else {
     var values = this.svg.selectAll('g')
                    .data(that.options.data)
                    .append('text')
@@ -112,10 +175,12 @@ labelOptions.drawLabels = function () {
                    })
                    .style('fill', that.options.valuesColor )
                    .style('text-anchor', function (d) {return textAnchorHandler('values', d);})
+                   .style('font-size', '0.875rem')
                     .attr('transform', function (d) {
-                      return 'translate(' + xPosHandler('values', d) + ',' +  yPosHandler('values',d) + ') rotate (' + rotationHandler() + ', 0 0)';
+                      return 'translate(' + xPosHandler('values', d, this) + ',' +  yPosHandler('values',d, this) + ') rotate (' + rotationHandler() + ', 0 0)';
                     })
                    .attr('dy', '0.35em');
+    }
   }
 
 };

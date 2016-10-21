@@ -1,5 +1,5 @@
-# d3by5-bar-graph
-The d3by5-bar-graph is part of the d3by5 graph tools, this specific package will draw a pie chart based on Mike Bostocks [Towards Reusable Charts](https://bost.ocks.org/mike/chart/)
+# d3by5-bar-chart
+The d3by5-bar-chart is part of the d3by5 graph tools, this specific package will draw a pie chart based on Mike Bostocks [Towards Reusable Charts](https://bost.ocks.org/mike/chart/)
 
 ## NOTE
 This is an internal project, you are probably better off using somethin like [C3](https://github.com/c3js/c3). That said, just give it a try and contact us back if you have any issues (no capslock please).
@@ -15,8 +15,8 @@ use the [version] version if you want to keep a specific version, use submodules
 
 #### dist/
 A browserified and uglified version with all dependencies included. Use this if you only want a simple graph to test.
-* bar-graph-[version].min.js    // uglified and minified with version
-* bar-graph.min.js              // uglified and minified without version
+* bar-chart-[version].min.js    // uglified and minified with version
+* bar-chart.min.js              // uglified and minified without version
 
 ## DEPENDENCIES
 Theree dependencies in package.json
@@ -47,7 +47,7 @@ The bar chart uses the [Base chart](https://github.com/kartoteket/d3by5-base-cha
 All methods are chained, you can simply instanciate a new bar graph like this
 
 ```javascript
-var bar = require('d3by5-bar-graph');
+var bar = require('d3by5-bar-chart');
 
 var bargraph = bargraph()
                     .width(500)
@@ -55,11 +55,11 @@ var bargraph = bargraph()
                     .data([{label:'coffee', values: 509}, {label:'tea', values: 1}]);
 var caller = _.bind(bargraph.init, bargraph);
 
-d3.select('.js-bar-graph')
+d3.select('.js-bar-chart')
     .call(caller);
 
 // alternate syntax
-var selection =) d3.select('.js-bar-graph');
+var selection =) d3.select('.js-bar-chart');
 bargraph.init(selection)
 ```
 

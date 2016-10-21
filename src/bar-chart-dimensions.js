@@ -8,7 +8,17 @@ var _ = require('underscore')
  * This class will return functions that attempts (and succeed) in getting the options based on type of data, layout and anchoring
  * @type {[type]}
  */
-module.exports = barDimensions;
+// define d3by5-base-chart for Node module pattern loaders, including Browserify
+if (typeof module === 'object' && typeof module.exports === 'object') {
+  module.exports = barDimensions;
+
+// define d3by5_PieChart as an AMD module
+} else if (typeof define === 'function' && define.amd) {
+
+  define(barDimensions);
+
+// define the base in a global namespace d3By5
+}
 
 /**
  * returns the width of the bar (could be breadth or length depending on dimension)
@@ -42,7 +52,7 @@ barDimensions.getBarBreadth = function () {
   ;
 
   return function (d) {
-            return useGroupedData ? that.groupedBreadthScale.rangeBand() : that.breadthScale.rangeBand();
+            return useGroupedData ? that.groupedordinalScale.rangeBand() : that.ordinalScale.rangeBand();
           };
 };
 
@@ -54,6 +64,6 @@ barDimensions.getBarLength = function () {
   var that = this;
 
   return function(d) {
-            return that.lengthScale(d.values);
+            return that.linearScale(d.values);
           };
 };

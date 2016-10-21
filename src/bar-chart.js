@@ -1,20 +1,45 @@
-'use:strict';
-var _ = require('underscore')
-  , d3 = require('d3')
-  , base = require('d3by5-base-chart')
-  , barOptions = require('./barOptions')
-  , labelOptions = require('./labelOptions')
-  , barPositions = require('./barPositions')
-  , barDimensions = require('./barDimensions')
-;
+/*!
+ * Bar chart
+ *
+ */
 
-module.exports = BarGraph;
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['underscore',
+                'd3',
+                './bar-chart-options',
+                './bar-chart-label-options',
+                './bar-chart-positions',
+                './bar-chart-dimensions',
+                './bar-chart-axis',
+                './base-chart'] , factory);
+    } else if (typeof module === 'object' && module.exports) {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+
+        module.exports = factory( require('underscore'),
+                                  require('d3'),
+                                  require('./bar-chart-positions'),
+                                  require('./bar-chart-label-options'),
+                                  require('./bar-chart-positions'),
+                                  require('./bar-chart-dimensions'),
+                                  require('./base-chart'));
+    } else {
+        // Browser globals (root is window)
+        root.returnExports = factory(root._, root.d3, root.barChartPositions, root.barChartLabelOptions, root.barChartPositions, root.barChartDimensions, root.baseChart);
+    }
+}(this, function (_, d3, barOptions, labelOptions, barPositions, barDimensions, barAxis, base) {
+
+'use:strict';
+
 
 /**
  * The entrypoint
  * @return {[type]} [description]
  */
-function BarGraph () {
+function BarChart () {
 
   var chart = {
     // enumish
@@ -38,15 +63,17 @@ function BarGraph () {
         labelPosition: 'none',
         labelAlign: 'left',
         labelColor: '#000',
-        valuesPosition: 'none',
+        labelFormat: null,
+        valuesPosition: 'fit',
         valuesAlign: 'left',
         valuesColor: '#000',
+        valuesFormat: null,
         idPrefix: 'bar-',
-        barLayout: 'grouped'
+        barLayout: 'grouped',
     },
 
     init: function (selection) {
-
+      console.log(this);
       if (arguments.length) {
         this.selection = selection;
         this.draw();
@@ -58,19 +85,21 @@ function BarGraph () {
       var that = this
         , positions = {}
         , dimensions = {}
+        // , axis = {}
+        // , axisopt = this.options.axis // shorthand for axis options
       ;
       // force a value for the dataType if there is a multi dimensional dataset
       this.options.barLayout = (that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL) ? this.options.barLayout || this.BARLAYOUT_GROUPED : null;
 
       this.maxValue = this.getMaxValue();
-      this.breadthScale = this.getBreadthScale();
-      this.lengthScale = this.getLengthScale();
+      this.ordinalScale = this.getOrdinalScale();
+      this.linearScale = this.getLinearScale();
 
       //
-      // Create a grouped breadth scale and update the dataset 
+      // Create a grouped breadth scale and update the dataset
       //
       if (that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL) {
-        this.groupedBreadthScale = this.getGroupedBreadthScale();
+        this.groupedordinalScale = this.getGroupedordinalScale();
 
         if (that.options.barLayout === this.BARLAYOUT_STACKED) {
           var lpos;
@@ -91,6 +120,8 @@ function BarGraph () {
       dimensions.width = this.getBarWidth();
       dimensions.height = this.getBarHeight();
 
+
+
       this.selection.each(function() {
 
         var dom = d3.select(this);
@@ -110,16 +141,16 @@ function BarGraph () {
 
         // The actual bars
         var bars = that.svg.selectAll('rect.chart__bar')
-             .data(that.options.data)
-            .enter()
-            .append('g')
-            .attr("id", function(d){return d.id;})
-            .attr('transform', function (d) {
-              var _x = that.options.margin.left + (that.isVertical() ? that.breadthScale(d.label) : 0)
-                , _y = that.isVertical() ? that.options.margin.top : that.breadthScale(d.label)
-              ;
-              return 'translate(' + _x + ',' + _y +')';
-            });
+                        .data(that.options.data)
+                        .enter()
+                        .append('g')
+                        .attr("id", function(d){return d.id;})
+                        .attr('transform', function (d) {
+                          var _x = that.options.margin.left + (that.isVertical() ? that.ordinalScale(d.label) : 0)
+                            , _y = that.isVertical() ? that.options.margin.top : that.ordinalScale(d.label)
+                          ;
+                          return 'translate(' + _x + ',' + _y +')';
+                        });
 
         //
         // Supply additional data if multi dimensional
@@ -129,24 +160,25 @@ function BarGraph () {
             .data(function(d) {
               return d.values;
             })
-          .enter().append("rect")
+          .enter()
+            .append('g')
+            .attr('class', 'barItem')
+            .append("rect")
             .attr(dimensions)
             .attr(positions)
             .style("fill", function(d) {
-              return d.color;
+              return that.options.fillColor(d.label);
             });
-
-
         }
         //
-        // Single dimension just sets the barse
+        // Single dimension just sets the bars
         //
         else {
           bars.append("rect")
               .attr(dimensions)
               .attr(positions)
               .style("fill", function(d) {
-                return d.color;
+                return that.options.fillColor(d.label);
               });
         }
 
@@ -155,18 +187,20 @@ function BarGraph () {
           that.drawLabels();
         }
 
+        that.drawAxis();
 
 
       });
 
-      this.onBarLayoutChange = function () {
-        this.draw();
-      };
 
-      // sets a method to allow redrawing
-      this.onAnchorChange = function () {
-        this.draw();
-      };
+    this.svg.selectAll(".axis text")
+          .attr('fill', '#777')
+          .style('font-size', '0.875rem');
+
+    this.svg.selectAll('.axis line, .axis path')
+          .attr('fill', 'none')
+          .attr('stroke', '#777')
+          .attr('stroke-width', '1');
     },
 
     /**
@@ -185,10 +219,6 @@ function BarGraph () {
         return this;
       }
       this.options.barLayout = value;
-      // redraw if the graph has been loaded
-      if (typeof this.onBarLayoutChange === 'function') {
-        this.onBarLayoutChange();
-      }
 
       return this;
     },
@@ -212,11 +242,6 @@ function BarGraph () {
       }
       this.options.anchor = value;
 
-      // redraw if the graph has been loaded
-      if (typeof this.onAnchorChange === 'function') {
-        this.onAnchorChange();
-      }
-
       return this;
     },
 
@@ -232,13 +257,12 @@ function BarGraph () {
 
       this.validateOption('labelPosition', value, [this.LABEL_INSIDE, this.LABEL_OUTSIDE, this.LABEL_FIT , this.LABEL_NONE]);
 
-      // redraw if the graph has been loaded
-      if (typeof this.onLabelChange === 'function') {
-        this.onLabelChange();
-      }
       return this;
     },
 
+    labelFormat: function (value) {
+      return arguments.length ? (this.setFormat('labelFormat', value), this) : this.options.labelFormat;
+    },
     labelAlign: function (value) {
       return arguments.length ? (this.validateOption('labelAlign', value, ['left', 'right', 'top', 'bottom']), this) : this.options.labelAlign;
     },
@@ -253,6 +277,9 @@ function BarGraph () {
     },
     valuesColor: function(value) {
       return arguments.length ? (this.options.valuesColor = value, this) : this.options.valuesColor;
+    },
+    valuesFormat: function () {
+      return arguments.length ? (this.options.valuesFormat = value, this) : this.options.valuesFormat;
     },
 
 
@@ -280,15 +307,14 @@ function BarGraph () {
 
 
 
-  chart = _.extend(chart, barOptions);
-  chart = _.extend(chart, barPositions);
-  chart = _.extend(chart, barDimensions);
-  chart = _.extend(chart, labelOptions);
+  chart = _.extend(chart, barOptions, barPositions, barDimensions, labelOptions);
+
 
 // keep the options clean
-  chart.options = _.extend(chart.options, base.options);
-  base = _.omit(base, 'options');
-  chart = _.extend(chart, base);
-  return (chart.init());
+  chart.options = _.extend(chart.options, base.options, barAxis.options);
+  chart = _.extend(chart, _.omit(base, 'options'), _.omit(barAxis, 'options'));
 
-}
+  return (chart.init());
+  }
+return BarChart;
+}));

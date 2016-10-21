@@ -8,7 +8,17 @@ var _ = require('underscore')
  * This class will return functions that attempts (and succeed) in getting the options based on type of data, layout and anchoring
  * @type {[type]}
  */
-module.exports = barPositions;
+// define d3by5-base-chart for Node module pattern loaders, including Browserify
+if (typeof module === 'object' && typeof module.exports === 'object') {
+  module.exports = barPositions;
+
+// define d3by5_PieChart as an AMD module
+} else if (typeof define === 'function' && define.amd) {
+
+  define(barPositions);
+
+// define the base in a global namespace d3By5
+}
 
 
 barPositions.getBarXPos = function () {
@@ -36,7 +46,7 @@ barPositions.getBreadthPos = function () {
     , useGroupedData = (this.options.barLayout === this.BARLAYOUT_GROUPED);
 
   return function(d) {
-            return useGroupedData ? that.groupedBreadthScale(d.label) : 0 ;
+            return useGroupedData ? that.groupedordinalScale(d.label) : 0 ;
           };
 };
 
@@ -55,9 +65,9 @@ barPositions.getLengthPos = function () {
               // stacked data needs to use cummulative sizes
               if (useStackedData) {
                 if (that.options.anchor === that.ANCHOR_LEFT || that.options.anchor === that.ANCHOR_TOP ) {
-                  return that.lengthScale(d.lpos) - that.lengthScale(d.values);
+                  return that.linearScale(d.lpos) - that.linearScale(d.values);
                 }
-                return that.getCalculatedHeight() - that.lengthScale(d.lpos);
+                return that.getCalculatedHeight() - that.linearScale(d.lpos);
               }
 
               if (that.options.anchor === that.ANCHOR_TOP || that.options.anchor === that.ANCHOR_LEFT ) {
@@ -65,9 +75,9 @@ barPositions.getLengthPos = function () {
               }
 
               if (that.options.anchor === that.ANCHOR_RIGHT ) {
-                return that.getCalculatedWidth() - that.lengthScale(d.values);
+                return that.getCalculatedWidth() - that.linearScale(d.values);
               }
 
-              return that.getCalculatedHeight() - that.lengthScale(d.values);
+              return that.getCalculatedHeight() - that.linearScale(d.values);
             };
 };

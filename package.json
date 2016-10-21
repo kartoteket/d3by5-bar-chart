@@ -1,14 +1,11 @@
 {
-  "name": "d3by5-bar-graph",
+  "name": "d3by5-bar-chart",
   "version": "0.0.1",
   "description": "A d3 implementation of horisontal bar graphs",
-  "main": "src/bar-graph.js",
-  "scripts": {
-    "build": "bin/build.sh"
-  },
+  "main": "src/bar-chart.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kartoteket/d3by5-horisontal_bar-graph.git"
+    "url": "git+https://github.com/kartoteket/d3by5-bar-chart.git"
   },
   "keywords": [
     "d3",
@@ -26,14 +23,15 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kartoteket/d3by5-horisontal_bar-graph/issues"
+    "url": "https://github.com/kartoteket/d3by5-bar-chart/issues"
   },
   "scripts": {
+    "build": "bin/build.sh",
     "test": "echo \"Error: no test specified\" && exit 1",
     "preinstall": "npm link ../d3by5-base-chart",
     "preupdate": "npm link ../d3by5-base-chart"
   },
-  "homepage": "https://github.com/kartoteket/d3by5-horisontal_bar-graph#readme",
+  "homepage": "https://github.com/kartoteket/d3by5-bar-chart#readme",
   "dependencies": {
     "d3": "^3.5.17",
     "d3by5-base-chart": "latest",
