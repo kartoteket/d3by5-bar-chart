@@ -49,11 +49,13 @@ barDimensions.getBarHeight = function () {
 barDimensions.getBarBreadth = function () {
   var that = this
     , useGroupedData = (this.options.barLayout === this.BARLAYOUT_GROUPED)
+    , value
   ;
 
   return function (d) {
-            return useGroupedData ? that.groupedordinalScale.rangeBand() : that.ordinalScale.rangeBand();
-          };
+    value = useGroupedData ? that.groupedordinalScale.rangeBand() : that.ordinalScale.rangeBand();
+    return Math.max(value, 1);
+  };
 };
 
 /**

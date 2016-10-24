@@ -10,11 +10,14 @@ This project adheres (well, maybe not quite) to [Semantic Versioning](http://sem
 - Added support for grouped bars
 - Added supportr for stacked bars
 
-## Changed
+### Changed
 - More details in the README
 - Refactored, creating a single barOptions for positions and dimensions of bars
 - Refactored, bar positions as separate class
 - Refactored, dimensions as separate class
+
+### Fixed
+- Ensure bar width never goes below 1px
 
 ## [0.0.1] - 2016-06-01
 ### Added
