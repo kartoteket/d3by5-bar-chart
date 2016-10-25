@@ -1,47 +1,54 @@
+/**
+ * [Description]
+ */
+
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['underscore','d3'] , factory);
+    } else if (typeof module === 'object' && module.exports) {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+        module.exports = factory(require('underscore'),require('d3'));
+    } else {
+        // Browser globals (root is window)
+        root.returnExports = factory(root._, root.d3);
+    }
+}(this, function (_, d3) {
+
 'use:strict';
-var _ = require('underscore')
-  , d3 = require('d3')
-  , barAxis = {}
-;
-// define d3by5-base-chart for Node module pattern loaders, including Browserify
-if (typeof module === 'object' && typeof module.exports === 'object') {
-  module.exports = barAxis;
 
-// define d3by5_PieChart as an AMD module
-} else if (typeof define === 'function' && define.amd) {
+function barAxis () {
+  return {
 
-  define(barAxis);
-
-// define the base in a global namespace d3By5
-}
-
-  barAxis.options = {
-          axis: {
-            linear: {
-              show: true,
-              rotate: 0,
-              label: '',
-              ticks: d3.svg.axis().ticks(),
-              align: 'left',
-              pos: 'bottom',
-            },
-            ordinal: {
-              show: true,
-              rotate: 0,
-              label: '',
-              ticks: d3.svg.axis().ticks(),
-              align: 'bottom',
-              pos: 'left',
+    options : {
+        axis: {
+          linear: {
+            show: true,
+            rotate: 0,
+            label: '',
+            ticks: d3.svg.axis().ticks(),
+            align: 'left',
+            pos: 'bottom',
+          },
+          ordinal: {
+            show: true,
+            rotate: 0,
+            label: '',
+            ticks: d3.svg.axis().ticks(),
+            align: 'bottom',
+            pos: 'left',
+          }
         }
-        }
-      };
+    },
 
     /**
      * retuns the correct scale to use for the axis
      * @param  {String} scale - What scale to use ( linear | ordinal)
      * @return {d3.scale}     - The correct scale
      */
-    barAxis.axis_getScale = function (scale) {
+    axis_getScale: function (scale) {
 
       // the values, normally y
       if (scale === 'linear') {
@@ -58,9 +65,9 @@ if (typeof module === 'object' && typeof module.exports === 'object') {
         }
         return this.ordinalScale;
       }
-    };
+    },
 
-    barAxis.axis_getTransform = function (dir) {
+    axis_getTransform: function (dir) {
       if (dir === 'linear') {
         if (this.isVertical()) {
           return 'translate(' + this.options.margin.left + ',' + this.options.margin.top + ')';
@@ -74,9 +81,9 @@ if (typeof module === 'object' && typeof module.exports === 'object') {
         }
         return 'translate(' + this.options.margin.left + ',' + this.options.margin.top + ')';
       }
-    };
+    },
 
-    barAxis.drawAxis = function(selection) {
+    drawAxis: function(selection) {
       var axis = {}
         , that = this
         , axisOpt = this.options.axis
@@ -200,91 +207,88 @@ if (typeof module === 'object' && typeof module.exports === 'object') {
           // }
         }
 
-// return barAxis;
-  };
+    },
 
-  barAxis.axis = function () {
-    var that = this
-      , axis = {
-        ticks: function (value) {
-          if (arguments.length) {
-            if(!_.isObject(value)) {
-              console.warn('missing value for align, allowed is {linear OR ordinal}, values: "auto", "none" or a number ');
+    axis: function () {
+      var that = this
+        , axis = {
+          ticks: function (value) {
+            if (arguments.length) {
+              if(!_.isObject(value)) {
+                console.warn('missing value for align, allowed is {linear OR ordinal}, values: "auto", "none" or a number ');
+                return that;
+              }
+              if (_.has(value, 'linear')) {
+                that.options.axis.linear.ticks = that.axis_parseTicks(value.linear);
+              }
+              if (_.has(value, 'ordinal')) {
+                that.options.axis.ordinal.ticks = that.axis_parseTicks(value.ordinal);
+              }
               return that;
             }
-            if (_.has(value, 'linear')) {
-              that.options.axis.linear.ticks = that.axis_parseTicks(value.linear);
-            }
-            if (_.has(value, 'ordinal')) {
-              that.options.axis.ordinal.ticks = that.axis_parseTicks(value.ordinal);
-            }
-            return that;
-          }
-          return {linear: that.options.axis.linear.ticks, ordinal: that.options.axis.linear.ticks};
-        },
-        align: function (value) {
-          if (arguments.length) {
-            if(!_.isObject(value)) {
-              console.warn('missing value for align, allowed is {linear OR ordinal}, values: top | bottom | left | right');
+            return {linear: that.options.axis.linear.ticks, ordinal: that.options.axis.linear.ticks};
+          },
+          align: function (value) {
+            if (arguments.length) {
+              if(!_.isObject(value)) {
+                console.warn('missing value for align, allowed is {linear OR ordinal}, values: top | bottom | left | right');
+                return that;
+              }
+              if (value.linear) {
+                that.options.axis.linear.align = value.linear;
+              }
+              if (value.ordinal) {
+                that.options.axis.ordinal.align = value.ordinal;
+              }
               return that;
             }
-            if (value.linear) {
-              that.options.axis.linear.align = value.linear;
-            }
-            if (value.ordinal) {
-              that.options.axis.ordinal.align = value.ordinal;
-            }
-            return that;
-          }
-          return {linear: that.options.axis.linear.align, ordinal: that.options.axis.linear.align};
-        },
-        rotate: function (value) {
-          if (arguments.length) {
-            if(!_.isObject(value)) {
-              console.warn('missing value for align, allowed is {linear OR ordinal}, values: -180 to 180');
+            return {linear: that.options.axis.linear.align, ordinal: that.options.axis.linear.align};
+          },
+          rotate: function (value) {
+            if (arguments.length) {
+              if(!_.isObject(value)) {
+                console.warn('missing value for align, allowed is {linear OR ordinal}, values: -180 to 180');
+                return that;
+              }
+              if (_.isNumber(value.linear)) {
+                that.options.axis.linear.rotate = value.linear;
+              }
+              if (_.isNumber(value.ordinal)) {
+                that.options.axis.ordinal.rotate = value.ordinal;
+              }
               return that;
             }
-            if (_.isNumber(value.linear)) {
-              that.options.axis.linear.rotate = value.linear;
-            }
-            if (_.isNumber(value.ordinal)) {
-              that.options.axis.ordinal.rotate = value.ordinal;
-            }
-            return that;
-          }
-          return {linear: that.options.axis.linear.rotate, ordinal: that.options.axis.linear.rotate};
-        },
-        label: function (value) {
-          if (arguments.length) {
-            if(!_.isObject(value)) {
-              console.warn('missing value for align, allowed is {linear OR ordinal}, values: any string');
+            return {linear: that.options.axis.linear.rotate, ordinal: that.options.axis.linear.rotate};
+          },
+          label: function (value) {
+            if (arguments.length) {
+              if(!_.isObject(value)) {
+                console.warn('missing value for align, allowed is {linear OR ordinal}, values: any string');
+                return that;
+              }
+
+              if(_.has(value, 'linear')) {
+               that.options.axis.linear.label = value.linear;
+              }
+
+              if(_.has(value, 'ordinal')) {
+                that.options.axis.ordinal.label = value.ordinal;
+              }
+
               return that;
             }
-
-            if(_.has(value, 'linear')) {
-             that.options.axis.linear.label = value.linear;
-            }
-
-            if(_.has(value, 'ordinal')) {
-              that.options.axis.ordinal.label = value.ordinal;
-            }
-
-            return that;
+            return {linear: that.options.axis.linear.label, ordinal: that.options.axis.ordinal.label};
           }
-          return {linear: that.options.axis.linear.label, ordinal: that.options.axis.ordinal.label};
-        }
-      };
-    return axis;
-  };
+        };
+      return axis;
+    },
 
-
-
-      /**
+    /**
      * Parse tick options before use
      * @param  {object} ticks {count, format}
      * @return {object}       {count, format}
      */
-    barAxis.axis_parseTicks = function() {
+    axis_parseTicks: function() {
 
       var count = arguments[0]
         , format = arguments[1];
@@ -313,5 +317,8 @@ if (typeof module === 'object' && typeof module.exports === 'object') {
       }
 
       return {count:count, format:format};
-    };
-// };
+    }
+  };
+}
+return barAxis();
+}));
