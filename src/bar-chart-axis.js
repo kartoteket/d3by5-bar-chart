@@ -260,12 +260,15 @@ if (typeof module === 'object' && typeof module.exports === 'object') {
               console.warn('missing value for align, allowed is {linear OR ordinal}, values: any string');
               return that;
             }
-            if (value.linear) {
-              that.options.axis.linear.label = value.linear;
+
+            if(_.has(value, 'linear')) {
+             that.options.axis.linear.label = value.linear;
             }
-            if (value.ordinal) {
+
+            if(_.has(value, 'ordinal')) {
               that.options.axis.ordinal.label = value.ordinal;
             }
+
             return that;
           }
           return {linear: that.options.axis.linear.label, ordinal: that.options.axis.linear.label};
