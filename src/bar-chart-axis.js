@@ -164,6 +164,18 @@ if (typeof module === 'object' && typeof module.exports === 'object') {
                         .style('text-anchor', 'start');
           }
 
+          _ordinalAxis
+              .append('text')
+                .attr('class', 'x-label')
+                .attr('transform', 'rotate(-90)')
+                .attr('x', 6)
+                .attr('y', this.getCalculatedWidth())
+                .attr('dy', '.71em')
+                .attr('fill', '#777')
+                .style('font-size', '0.875rem')
+                .style('text-anchor', 'start')
+                .text(axisOpt.ordinal.label);
+
 
 
           // axis.y = this.axis()
