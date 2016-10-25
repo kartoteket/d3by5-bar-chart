@@ -271,7 +271,7 @@ if (typeof module === 'object' && typeof module.exports === 'object') {
 
             return that;
           }
-          return {linear: that.options.axis.linear.label, ordinal: that.options.axis.linear.label};
+          return {linear: that.options.axis.linear.label, ordinal: that.options.axis.ordinal.label};
         }
       };
     return axis;
