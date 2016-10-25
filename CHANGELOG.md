@@ -18,6 +18,7 @@ This project adheres (well, maybe not quite) to [Semantic Versioning](http://sem
 
 ### Fixed
 - Ensure bar width never goes below 1px
+- Fixed an issue with the UMD loader for label options
 
 ## [0.0.1] - 2016-06-01
 ### Added
