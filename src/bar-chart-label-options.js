@@ -1,26 +1,27 @@
-/**
- * [Description]
+/*!
+ * Label options mixin
+ *
  */
 
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
-        define(['underscore','d3'] , factory);
+        define(['underscore', 'd3'] , factory);
     } else if (typeof module === 'object' && module.exports) {
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like environments that support module.exports,
         // like Node.
-        module.exports = factory(require('underscore'),require('d3'));
+        module.exports = factory(require('underscore'), require('d3'));
     } else {
         // Browser globals (root is window)
-        root.returnExports = factory(root._, root.d3);
+        root.returnExports = factory(root.labelOptions/*, root.baseChartAxis*/);
     }
 }(this, function (_, d3) {
 
 'use:strict';
-
 function labelOptions () {
-  var options = {
+
+  var lOptions = {
 
     setFormat: function (prop, value) {
       var formatter = d3.time.format(value)
@@ -53,7 +54,8 @@ function labelOptions () {
 
       xPosHandler = function (prop, d, elem) {
         var _rect
-          , _bbox;
+          , _bbox
+        ;
 
           if(elem.previousSibling) {
             _bbox = elem.previousSibling.getBBox();
@@ -87,7 +89,10 @@ function labelOptions () {
 
       yPosHandler = function (prop, d, elem) {
         var _rect
-          , _bbox;
+          , _bbox
+          , labels
+          , values
+        ;
 
           if(elem.previousSibling) {
             _bbox = elem.previousSibling.getBBox();
@@ -133,7 +138,6 @@ function labelOptions () {
       };
 
       applyLabelFormat = function (text) {
-        var values, labels;
         if (that.options.labelFormat) {
           return that.options.labelFormat(text);
         }
@@ -174,7 +178,7 @@ function labelOptions () {
                           })
                           .attr('dy', '0.35em');
         } else {
-        values = this.svg.selectAll('g')
+         values = this.svg.selectAll('g')
                        .data(that.options.data)
                        .append('text')
                        .attr('class', 'label')
@@ -190,11 +194,9 @@ function labelOptions () {
                        .attr('dy', '0.35em');
         }
       }
-
     }
   };
-
-  return options;
+  return lOptions;
 }
 return labelOptions();
 }));
