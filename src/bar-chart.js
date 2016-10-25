@@ -73,7 +73,6 @@ function BarChart () {
     },
 
     init: function (selection) {
-      console.log(this);
       if (arguments.length) {
         this.selection = selection;
         this.draw();

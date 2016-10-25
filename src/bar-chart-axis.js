@@ -126,12 +126,12 @@ if (typeof module === 'object' && typeof module.exports === 'object') {
           _linearAxis
               .append('text')
                 .attr('class', 'y-label')
-                .attr('transform', 'rotate(-90)')
-                .attr('y', 6)
+                // .attr('transform', 'rotate(-90)')
+                .attr('y', -20)
                 .attr('dy', '.71em')
                 .attr('fill', '#777')
                 .style('font-size', '0.875rem')
-                .style('text-anchor', 'end')
+                .style('text-anchor', 'start')
                 .text(axisOpt.linear.label);
         }
 
@@ -163,6 +163,18 @@ if (typeof module === 'object' && typeof module.exports === 'object') {
                         .attr('transform', 'rotate(' + axisOpt.ordinal.rotate + ')')
                         .style('text-anchor', 'start');
           }
+
+          _ordinalAxis
+              .append('text')
+                .attr('class', 'x-label')
+                .attr('transform', 'rotate(-90)')
+                .attr('x', 6)
+                .attr('y', this.getCalculatedWidth())
+                .attr('dy', '.71em')
+                .attr('fill', '#777')
+                .style('font-size', '0.875rem')
+                .style('text-anchor', 'start')
+                .text(axisOpt.ordinal.label);
 
 
 
@@ -248,15 +260,18 @@ if (typeof module === 'object' && typeof module.exports === 'object') {
               console.warn('missing value for align, allowed is {linear OR ordinal}, values: any string');
               return that;
             }
-            if (value.linear) {
-              that.options.axis.linear.label = value.linear;
+
+            if(_.has(value, 'linear')) {
+             that.options.axis.linear.label = value.linear;
             }
-            if (value.ordinal) {
+
+            if(_.has(value, 'ordinal')) {
               that.options.axis.ordinal.label = value.ordinal;
             }
+
             return that;
           }
-          return {linear: that.options.axis.linear.label, ordinal: that.options.axis.linear.label};
+          return {linear: that.options.axis.linear.label, ordinal: that.options.axis.ordinal.label};
         }
       };
     return axis;
