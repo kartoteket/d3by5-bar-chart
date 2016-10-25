@@ -126,12 +126,12 @@ if (typeof module === 'object' && typeof module.exports === 'object') {
           _linearAxis
               .append('text')
                 .attr('class', 'y-label')
-                .attr('transform', 'rotate(-90)')
-                .attr('y', 6)
+                // .attr('transform', 'rotate(-90)')
+                .attr('y', -20)
                 .attr('dy', '.71em')
                 .attr('fill', '#777')
                 .style('font-size', '0.875rem')
-                .style('text-anchor', 'end')
+                .style('text-anchor', 'start')
                 .text(axisOpt.linear.label);
         }
 
