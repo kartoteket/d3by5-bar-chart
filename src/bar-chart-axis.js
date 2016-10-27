@@ -226,7 +226,7 @@ function barAxis () {
               }
               return that;
             }
-            return {linear: that.options.axis.linear.ticks, ordinal: that.options.axis.linear.ticks};
+            return {linear: that.options.axis.linear.ticks, ordinal: that.options.axis.ordinal.ticks};
           },
           align: function (value) {
             if (arguments.length) {
@@ -258,7 +258,7 @@ function barAxis () {
               }
               return that;
             }
-            return {linear: that.options.axis.linear.rotate, ordinal: that.options.axis.linear.rotate};
+            return {linear: that.options.axis.linear.rotate, ordinal: that.options.axis.ordinal.rotate};
           },
           label: function (value) {
             if (arguments.length) {
