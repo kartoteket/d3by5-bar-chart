@@ -83,6 +83,26 @@ function barAxis () {
       }
     },
 
+    /**
+     * fuzzy replicating nativd d3 ticks count for ordinal scaled axis
+     * @param {int} count number of ticks
+     */
+    _setTickValues: function(count) {
+
+      var total = this.ordinalScale.domain().length
+        , step = Math.ceil(total/count) || 0
+        , tickValues;
+
+      if(total === 0)
+        return [];
+
+      tickValues = this.ordinalScale.domain().filter(function(item, index) {
+        return index % step == 1;
+      });
+
+      return tickValues.length ? tickValues : [];
+    },
+
     drawAxis: function(selection) {
       var axis = {}
         , that = this
@@ -151,10 +171,8 @@ function barAxis () {
 
           if (axisOpt.ordinal.ticks.count === 'none') {
             axis.ordinal.tickValues([]);
-                    // .ticks(axisOpt.ordinal.ticks.count);
-                    // .tickFormat(axisOpt.ordinal.ticks.format);
-          } else {
-            axis.ordinal.ticks(axisOpt.ordinal.ticks.count);
+          } else if (_.isNumber(axisOpt.ordinal.ticks.count)) {
+            axis.ordinal.tickValues(that._setTickValues(axisOpt.ordinal.ticks.count));
           }
 
           if (axisOpt.ordinal.ticks.format) {
