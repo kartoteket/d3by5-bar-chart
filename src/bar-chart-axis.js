@@ -169,9 +169,9 @@ function barAxis () {
                     .scale(ordinalScale)
                     .orient(axisOpt.ordinal.align);
 
-          if (axisOpt.ordinal.ticks.count === 'none') {
+          if (axisOpt.ordinal.ticks.count === 0) {
             axis.ordinal.tickValues([]);
-          } else if (_.isNumber(axisOpt.ordinal.ticks.count)) {
+          } else if (axisOpt.ordinal.ticks.count > 0) {
             axis.ordinal.tickValues(that._setTickValues(axisOpt.ordinal.ticks.count));
           }
 
@@ -237,7 +237,7 @@ function barAxis () {
           ticks: function (value) {
             if (arguments.length) {
               if(!_.isObject(value)) {
-                console.warn('missing value for align, allowed is {linear OR ordinal}, values: "auto", "none" or a number ');
+                console.warn('missing value for tick count, allowed is {linear OR ordinal}, values: null ("auto"), 0 ("none") or a number ');
                 return that;
               }
               if (_.has(value, 'linear')) {
@@ -269,7 +269,7 @@ function barAxis () {
           rotate: function (value) {
             if (arguments.length) {
               if(!_.isObject(value)) {
-                console.warn('missing value for align, allowed is {linear OR ordinal}, values: -180 to 180');
+                console.warn('missing value for rotate, allowed is {linear OR ordinal}, values: -180 to 180');
                 return that;
               }
               if (_.isNumber(value.linear)) {
@@ -285,7 +285,7 @@ function barAxis () {
           label: function (value) {
             if (arguments.length) {
               if(!_.isObject(value)) {
-                console.warn('missing value for align, allowed is {linear OR ordinal}, values: any string');
+                console.warn('missing value for label, allowed is {linear OR ordinal}, values: any string');
                 return that;
               }
 
@@ -328,7 +328,7 @@ function barAxis () {
           count = null;
           break;
         case 'none':
-          count = 'none';
+          count = 0;
           break;
         default:
           count = +count;
