@@ -157,6 +157,10 @@ function barAxis () {
             axis.ordinal.ticks(axisOpt.ordinal.ticks.count);
           }
 
+          if (axisOpt.ordinal.ticks.format) {
+            axis.ordinal.tickFormat(axisOpt.ordinal.ticks.format);
+          }
+
           _ordinalAxis = this.svg.append('g')
               .attr('class', 'x axis')
               .attr('transform', that.axis_getTransform('ordinal'))
@@ -288,13 +292,21 @@ function barAxis () {
      * @param  {object} ticks {count, format}
      * @return {object}       {count, format}
      */
-    axis_parseTicks: function() {
+    axis_parseTicks: function(inData) {
 
-      var count = arguments[0]
-        , format = arguments[1];
+      if (!_.isObject(inData)) {
+        console.warn('ticks must be an object with one or both properties "count" (auto | none | [0-n]) "format" (auto | d3,time,format)');
+        return {count:null, format:null};
+      }
+
+      var count = inData.count
+        , format = inData.format
+      ;
 
       switch(count) {
         case 'auto':
+        case null:
+        case undefined:
           count = null;
           break;
         case 'none':
@@ -308,6 +320,7 @@ function barAxis () {
       // TODO: Handfe more formats that just date/time
       switch(format) {
         case undefined:
+        case null:
         case 'auto':
           format = null;
           break;
