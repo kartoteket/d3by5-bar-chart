@@ -144,6 +144,7 @@ function labelOptions () {
         return text;
       };
 
+
       if (that.options.labelPosition !== that.LABEL_NONE) {
         labels = this.svg.selectAll('g')
                        .data(that.options.data)
@@ -168,7 +169,7 @@ function labelOptions () {
                           .append('text')
                           .attr('class', 'label')
                           .text(function (d, i) {
-                            return d.values;
+                            return that.formatNumber(d.values, that.options.valuesFormat);
                           })
                           .style('fill', that.options.valuesColor )
                           .style('text-anchor', function (d) {return textAnchorHandler('values', d);})
@@ -183,7 +184,7 @@ function labelOptions () {
                        .append('text')
                        .attr('class', 'label')
                        .text(function (d) {
-                          return d.values;
+                            return that.formatNumber(d.values, that.options.valuesFormat);
                        })
                        .style('fill', that.options.valuesColor )
                        .style('text-anchor', function (d) {return textAnchorHandler('values', d);})

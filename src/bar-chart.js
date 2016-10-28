@@ -67,7 +67,7 @@ function BarChart () {
         valuesPosition: 'fit',
         valuesAlign: 'left',
         valuesColor: '#000',
-        valuesFormat: null,
+        // valuesFormat: null,
         idPrefix: 'bar-',
         barLayout: 'grouped',
     },
@@ -277,9 +277,11 @@ function BarChart () {
     valuesColor: function(value) {
       return arguments.length ? (this.options.valuesColor = value, this) : this.options.valuesColor;
     },
-    valuesFormat: function () {
-      return arguments.length ? (this.options.valuesFormat = value, this) : this.options.valuesFormat;
-    },
+
+    // Svale, seems like this is a ghost. Never implemented ??!? Moved to base.
+    // valuesFormat: function () {
+    //   return arguments.length ? (this.options.valuesFormat = value, this) : this.options.valuesFormat;
+    // },
 
 
     /**
