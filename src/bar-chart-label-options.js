@@ -23,19 +23,6 @@ function labelOptions () {
 
   var lOptions = {
 
-    setFormat: function (prop, value) {
-      var formatter = d3.time.format(value)
-        , output
-      ;
-      // check it for data format
-      // if the format func returns the input, if is messed up
-      if (value === formatter(new Date())) {
-        this.options[prop] = null;
-      } else {
-        this.options[prop] = formatter;
-      }
-    },
-
     drawLabels: function () {
 
       var that = this
