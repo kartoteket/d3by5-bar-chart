@@ -62,7 +62,7 @@ function BarChart () {
         valuesPosition: 'fit',
         valuesAlign: 'left',
         valuesColor: '#000',
-        valuesFormat: null,
+        // valuesFormat: null,
         idPrefix: 'bar-',
         barLayout: 'grouped',
     },
@@ -238,8 +238,6 @@ function BarChart () {
 
       return this;
     },
-
-
 
 
   };
