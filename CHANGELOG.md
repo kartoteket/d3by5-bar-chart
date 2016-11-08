@@ -15,6 +15,7 @@ This project adheres (well, maybe not quite) to [Semantic Versioning](http://sem
 - Refactored, creating a single barOptions for positions and dimensions of bars
 - Refactored, bar positions as separate class
 - Refactored, dimensions as separate class
+- renamed ordinal and linear to x and y for all scales and axis
 
 ### Fixed
 - Ensure bar width never goes below 1px

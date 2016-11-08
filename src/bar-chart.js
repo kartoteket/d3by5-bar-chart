@@ -86,14 +86,14 @@ function BarChart () {
       this.options.barLayout = (that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL) ? this.options.barLayout || this.BARLAYOUT_GROUPED : null;
 
       this.maxValue = this.getMaxValue();
-      this.ordinalScale = this.getOrdinalScale();
-      this.linearScale = this.getLinearScale();
+      this.xScale = this.getXScale();
+      this.yScale = this.getYScale();
 
       //
       // Create a grouped breadth scale and update the dataset
       //
       if (that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL) {
-        this.groupedordinalScale = this.getGroupedordinalScale();
+        this.groupedXScale = this.getGroupedXScale();
 
         if (that.options.barLayout === this.BARLAYOUT_STACKED) {
           var lpos;
@@ -140,8 +140,8 @@ function BarChart () {
                         .append('g')
                         .attr("id", function(d){return d.id;})
                         .attr('transform', function (d) {
-                          var _x = that.options.margin.left + (that.isVertical() ? that.ordinalScale(d.label) : 0)
-                            , _y = that.isVertical() ? that.options.margin.top : that.ordinalScale(d.label)
+                          var _x = that.options.margin.left + (that.isVertical() ? that.xScale(d.label) : 0)
+                            , _y = that.isVertical() ? that.options.margin.top : that.xScale(d.label)
                           ;
                           return 'translate(' + _x + ',' + _y +')';
                         });
@@ -183,6 +183,16 @@ function BarChart () {
 
         that.drawAxis();
 
+        //
+        // Add the draw event to bar charts
+        //
+        drawEvent = _.find(that.options.on, function (o) {
+          return o.action === 'draw';
+        });
+
+        if (drawEvent && _.isFunction (drawEvent.method)) {
+          drawEvent.method.call(that);
+        }
 
       });
 
@@ -210,6 +220,7 @@ function BarChart () {
       if (value !== this.BARLAYOUT_GROUPED &&
           value !== this.BARLAYOUT_STACKED) {
         console.error(value, 'is invalid. Only ', this.BARLAYOUT_STACKED, ' OR ', this.BARLAYOUT_GROUPED, ' allowed');
+
         return this;
       }
       this.options.barLayout = value;

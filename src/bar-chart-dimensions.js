@@ -57,7 +57,7 @@ function barDimensions () {
       ;
 
       return function (d) {
-        value = useGroupedData ? that.groupedordinalScale.rangeBand() : that.ordinalScale.rangeBand();
+        value = useGroupedData ? that.groupedXScale.rangeBand() : that.xScale.rangeBand();
         return Math.max(value, 1);
       };
     },
@@ -70,7 +70,7 @@ function barDimensions () {
       var that = this;
 
       return function(d) {
-        return that.linearScale(d.values);
+        return that.yScale(d.values);
       };
     }
   };
