@@ -57,7 +57,7 @@ function barPositions () {
         , useGroupedData = (this.options.barLayout === this.BARLAYOUT_GROUPED);
 
       return function(d) {
-        return useGroupedData ? that.groupedordinalScale(d.label) : 0 ;
+        return useGroupedData ? that.groupedXScale(d.label) : 0 ;
       };
     },
 
@@ -76,9 +76,9 @@ function barPositions () {
         // stacked data needs to use cummulative sizes
         if (useStackedData) {
           if (that.options.anchor === that.ANCHOR_LEFT || that.options.anchor === that.ANCHOR_TOP ) {
-            return that.linearScale(d.lpos) - that.linearScale(d.values);
+            return that.yScale(d.lpos) - that.yScale(d.values);
           }
-          return that.getCalculatedHeight() - that.linearScale(d.lpos);
+          return that.getCalculatedHeight() - that.yScale(d.lpos);
         }
 
         if (that.options.anchor === that.ANCHOR_TOP || that.options.anchor === that.ANCHOR_LEFT ) {
@@ -86,10 +86,10 @@ function barPositions () {
         }
 
         if (that.options.anchor === that.ANCHOR_RIGHT ) {
-          return that.getCalculatedWidth() - that.linearScale(d.values);
+          return that.getCalculatedWidth() - that.yScale(d.values);
         }
 
-        return that.getCalculatedHeight() - that.linearScale(d.values);
+        return that.getCalculatedHeight() - that.yScale(d.values);
       };
     }
   };

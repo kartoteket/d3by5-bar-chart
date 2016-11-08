@@ -34,7 +34,7 @@ function BarChartOptions () {
      *
      * @return {d3.scale} - a scale to calculate the wideness of a bar
      */
-    getOrdinalScale: function () {
+    getXScale: function () {
       var bRange
         , bDomain
       ;
@@ -70,7 +70,7 @@ function BarChartOptions () {
      *
      * @return {d3.scale} - a scale to calculate the length of a bar
      */
-    getLinearScale: function () {
+    getYScale: function () {
       var lRange;
 
       //
@@ -95,7 +95,7 @@ function BarChartOptions () {
      *
      * @return {d3.scale} - a scale to calculate the wideness of grouped bar
      */
-    getGroupedordinalScale: function () {
+    getGroupedXScale: function () {
       var bDomain;
 
       //
@@ -110,7 +110,7 @@ function BarChartOptions () {
       //
       return d3.scale.ordinal()
                       .domain(bDomain)
-                      .rangeRoundBands([this.ordinalScale.rangeBand(), 0]);
+                      .rangeRoundBands([this.xScale.rangeBand(), 0]);
     },
 
 

@@ -24,7 +24,7 @@ function barAxis () {
 
     options : {
         axis: {
-          linear: {
+          y: {
             show: true,
             rotate: 0,
             label: '',
@@ -32,7 +32,7 @@ function barAxis () {
             align: 'left',
             pos: 'bottom',
           },
-          ordinal: {
+          x: {
             show: true,
             rotate: 0,
             label: '',
@@ -45,58 +45,58 @@ function barAxis () {
 
     /**
      * retuns the correct scale to use for the axis
-     * @param  {String} scale - What scale to use ( linear | ordinal)
+     * @param  {String} scale - What scale to use ( y | x)
      * @return {d3.scale}     - The correct scale
      */
     axis_getScale: function (scale) {
 
       // the values, normally y
-      if (scale === 'linear') {
+      if (scale === 'y') {
         if (this.options.anchor === this.ANCHOR_RIGHT || this.options.anchor === this.ANCHOR_BOTTOM) {
           invertedScale = d3.scale.linear()
-                            .domain(this.linearScale.domain().reverse())
-                            .range(this.linearScale.range());
+                            .domain(this.yScale.domain().reverse())
+                            .range(this.yScale.range());
           return invertedScale;
         }
-        return this.linearScale;
+        return this.yScale;
       } else {
         if (this.isVertical()) {
-          return this.ordinalScale;
+          return this.xScale;
         }
-        return this.ordinalScale;
+        return this.xScale;
       }
     },
 
     axis_getTransform: function (dir) {
-      if (dir === 'linear') {
+      if (dir === 'y') {
         if (this.isVertical()) {
           return 'translate(' + this.options.margin.left + ',' + this.options.margin.top + ')';
         }
-        return 'translate(' + this.options.margin.left + ',' + (this.options.axis.linear.align === 'top' ? 0 : this.getCalculatedHeight()) + ')';
+        return 'translate(' + this.options.margin.left + ',' + (this.options.axis.y.align === 'top' ? 0 : this.getCalculatedHeight()) + ')';
       }
 
-      if (dir === 'ordinal') {
+      if (dir === 'x') {
         if (this.isVertical()) {
-          return 'translate(' + this.options.margin.left + ',' + (this.options.axis.linear.align === 'top' ? 0 : this.options.height - this.options.margin.bottom ) + ')';
+          return 'translate(' + this.options.margin.left + ',' + (this.options.axis.y.align === 'top' ? 0 : this.options.height - this.options.margin.bottom ) + ')';
         }
         return 'translate(' + this.options.margin.left + ',' + this.options.margin.top + ')';
       }
     },
 
     /**
-     * fuzzy replicating nativd d3 ticks count for ordinal scaled axis
+     * fuzzy replicating nativd d3 ticks count for x scaled axis
      * @param {int} count number of ticks
      */
     _setTickValues: function(count) {
 
-      var total = this.ordinalScale.domain().length
+      var total = this.xScale.domain().length
         , step = Math.ceil(total/count) || 0
         , tickValues;
 
       if(total === 0)
         return [];
 
-      tickValues = this.ordinalScale.domain().filter(function(item, index) {
+      tickValues = this.xScale.domain().filter(function(item, index) {
         return index % step == 1;
       });
 
@@ -108,49 +108,49 @@ function barAxis () {
         , that = this
         , axisOpt = this.options.axis
         , transform
-        , _linearAxis
-        , _ordinalAxis
-        , ordinalScale
-        , linearRotationAttr
+        , _yAxis
+        , _xAxis
+        , xScale
+        , yRotationAttr
       ;
 
 
 
 
 
-      if(axisOpt.linear.show) {
+      if(axisOpt.y.show) {
 
-        axis.linear = d3.svg.axis()
-                    .scale(this.axis_getScale('linear'))
-                    .orient(axisOpt.linear.align)
-                    .ticks(axisOpt.linear.ticks.count)
-                    .tickFormat(axisOpt.linear.ticks.format);
+        axis.y = d3.svg.axis()
+                    .scale(this.axis_getScale('y'))
+                    .orient(axisOpt.y.align)
+                    .ticks(axisOpt.y.ticks.count)
+                    .tickFormat(axisOpt.y.ticks.format);
 
-          _linearAxis = this.svg.append('g')
+          _yAxis = this.svg.append('g')
               .attr('class', 'y axis')
-              .attr('transform', that.axis_getTransform('linear'))
-              .call(axis.linear);
+              .attr('transform', that.axis_getTransform('y'))
+              .call(axis.y);
 
-          if (axisOpt.linear.rotate) {
-            linearRotationAttr = {};
+          if (axisOpt.y.rotate) {
+            yRotationAttr = {};
             //negative rotation needs adjustments
-            if(axisOpt.linear.rotate < 0) {
-              linearRotationAttr.y = -7;
-              linearRotationAttr.x = -7;
+            if(axisOpt.y.rotate < 0) {
+              yRotationAttr.y = -7;
+              yRotationAttr.x = -7;
             } else {
-              linearRotationAttr.y = 0;
-              linearRotationAttr.x = 0;
+              yRotationAttr.y = 0;
+              yRotationAttr.x = 0;
             }
-            linearRotationAttr.transform = 'rotate(' + axisOpt.linear.rotate + ')';
+            yRotationAttr.transform = 'rotate(' + axisOpt.y.rotate + ')';
 
 
 
-            _linearAxis.selectAll('text')
-                        .attr(linearRotationAttr)
-                        .style('text-anchor', axisOpt.linear.rotate < 0 ? 'end' : 'start');
+            _yAxis.selectAll('text')
+                        .attr(yRotationAttr)
+                        .style('text-anchor', axisOpt.y.rotate < 0 ? 'end' : 'start');
           }
 
-          _linearAxis
+          _yAxis
               .append('text')
                 .attr('class', 'y-label')
                 // .attr('transform', 'rotate(-90)')
@@ -159,41 +159,41 @@ function barAxis () {
                 .attr('fill', '#777')
                 .style('font-size', '0.875rem')
                 .style('text-anchor', 'start')
-                .text(axisOpt.linear.label);
+                .text(axisOpt.y.label);
         }
 
         //yAxis
-        if(axisOpt.ordinal.show) {
-          ordinalScale = this.axis_getScale('ordinal');
-          axis.ordinal = d3.svg.axis()
-                    .scale(ordinalScale)
-                    .orient(axisOpt.ordinal.align);
+        if(axisOpt.x.show) {
+          xScale = this.axis_getScale('x');
+          axis.x = d3.svg.axis()
+                    .scale(xScale)
+                    .orient(axisOpt.x.align);
 
-          if (axisOpt.ordinal.ticks.count === 0) {
-            axis.ordinal.tickValues([]);
-          } else if (axisOpt.ordinal.ticks.count > 0) {
-            axis.ordinal.tickValues(that._setTickValues(axisOpt.ordinal.ticks.count));
+          if (axisOpt.x.ticks.count === 0) {
+            axis.x.tickValues([]);
+          } else if (axisOpt.x.ticks.count > 0) {
+            axis.x.tickValues(that._setTickValues(axisOpt.x.ticks.count));
           }
 
-          if (axisOpt.ordinal.ticks.format) {
-            axis.ordinal.tickFormat(axisOpt.ordinal.ticks.format);
+          if (axisOpt.x.ticks.format) {
+            axis.x.tickFormat(axisOpt.x.ticks.format);
           }
 
-          _ordinalAxis = this.svg.append('g')
+          _xAxis = this.svg.append('g')
               .attr('class', 'x axis')
-              .attr('transform', that.axis_getTransform('ordinal'))
-            .call(axis.ordinal);
+              .attr('transform', that.axis_getTransform('x'))
+            .call(axis.x);
 
-          if (axisOpt.ordinal.rotate) {
-            _ordinalAxis.selectAll('text')
-                        .attr('y', axisOpt.ordinal.rotate === 90 ? -6 : 0)
+          if (axisOpt.x.rotate) {
+            _xAxis.selectAll('text')
+                        .attr('y', axisOpt.x.rotate === 90 ? -6 : 0)
                         .attr('x', 7)
                         // .attr("dy", ".35em")
-                        .attr('transform', 'rotate(' + axisOpt.ordinal.rotate + ')')
+                        .attr('transform', 'rotate(' + axisOpt.x.rotate + ')')
                         .style('text-anchor', 'start');
           }
 
-          _ordinalAxis
+          _xAxis
               .append('text')
                 .attr('class', 'x-label')
                 .attr('transform', 'rotate(-90)')
@@ -203,7 +203,7 @@ function barAxis () {
                 .attr('fill', '#777')
                 .style('font-size', '0.875rem')
                 .style('text-anchor', 'start')
-                .text(axisOpt.ordinal.label);
+                .text(axisOpt.x.label);
 
 
 
@@ -237,69 +237,69 @@ function barAxis () {
           ticks: function (value) {
             if (arguments.length) {
               if(!_.isObject(value)) {
-                console.warn('missing value for tick count, allowed is {linear OR ordinal}, values: null ("auto"), 0 ("none") or a number ');
+                console.warn('missing value for tick count, allowed is {y OR x}, values: null ("auto"), 0 ("none") or a number ');
                 return that;
               }
-              if (_.has(value, 'linear')) {
-                that.options.axis.linear.ticks = that.axis_parseTicks(value.linear);
+              if (_.has(value, 'y')) {
+                that.options.axis.y.ticks = that.axis_parseTicks(value.y);
               }
-              if (_.has(value, 'ordinal')) {
-                that.options.axis.ordinal.ticks = that.axis_parseTicks(value.ordinal);
+              if (_.has(value, 'x')) {
+                that.options.axis.x.ticks = that.axis_parseTicks(value.x);
               }
               return that;
             }
-            return {linear: that.options.axis.linear.ticks, ordinal: that.options.axis.ordinal.ticks};
+            return {y: that.options.axis.y.ticks, x: that.options.axis.x.ticks};
           },
           align: function (value) {
             if (arguments.length) {
               if(!_.isObject(value)) {
-                console.warn('missing value for align, allowed is {linear OR ordinal}, values: top | bottom | left | right');
+                console.warn('missing value for align, allowed is {y OR x}, values: top | bottom | left | right');
                 return that;
               }
-              if (value.linear) {
-                that.options.axis.linear.align = value.linear;
+              if (value.y) {
+                that.options.axis.y.align = value.y;
               }
-              if (value.ordinal) {
-                that.options.axis.ordinal.align = value.ordinal;
+              if (value.x) {
+                that.options.axis.x.align = value.x;
               }
               return that;
             }
-            return {linear: that.options.axis.linear.align, ordinal: that.options.axis.linear.align};
+            return {y: that.options.axis.y.align, x: that.options.axis.y.align};
           },
           rotate: function (value) {
             if (arguments.length) {
               if(!_.isObject(value)) {
-                console.warn('missing value for rotate, allowed is {linear OR ordinal}, values: -180 to 180');
+                console.warn('missing value for rotate, allowed is {y OR x}, values: -180 to 180');
                 return that;
               }
-              if (_.isNumber(value.linear)) {
-                that.options.axis.linear.rotate = value.linear;
+              if (_.isNumber(value.y)) {
+                that.options.axis.y.rotate = value.y;
               }
-              if (_.isNumber(value.ordinal)) {
-                that.options.axis.ordinal.rotate = value.ordinal;
+              if (_.isNumber(value.x)) {
+                that.options.axis.x.rotate = value.x;
               }
               return that;
             }
-            return {linear: that.options.axis.linear.rotate, ordinal: that.options.axis.ordinal.rotate};
+            return {y: that.options.axis.y.rotate, x: that.options.axis.x.rotate};
           },
           label: function (value) {
             if (arguments.length) {
               if(!_.isObject(value)) {
-                console.warn('missing value for label, allowed is {linear OR ordinal}, values: any string');
+                console.warn('missing value for label, allowed is {y OR x}, values: any string');
                 return that;
               }
 
-              if(_.has(value, 'linear')) {
-               that.options.axis.linear.label = value.linear;
+              if(_.has(value, 'y')) {
+               that.options.axis.y.label = value.y;
               }
 
-              if(_.has(value, 'ordinal')) {
-                that.options.axis.ordinal.label = value.ordinal;
+              if(_.has(value, 'x')) {
+                that.options.axis.x.label = value.x;
               }
 
               return that;
             }
-            return {linear: that.options.axis.linear.label, ordinal: that.options.axis.ordinal.label};
+            return {y: that.options.axis.y.label, x: that.options.axis.x.label};
           }
         };
       return axis;
