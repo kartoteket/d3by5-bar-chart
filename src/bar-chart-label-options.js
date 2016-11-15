@@ -47,7 +47,6 @@ function labelOptions () {
           if(elem.previousSibling) {
             _bbox = elem.previousSibling.getBBox();
           } else {
-            console.log('no x sibling');
             _rect = that.svg.select('#' + d.id).select('rect');
             _bbox  = _rect.node().getBBox();
           }
@@ -84,7 +83,7 @@ function labelOptions () {
           if(elem.previousSibling) {
             _bbox = elem.previousSibling.getBBox();
           } else {
-            console.log('no y sibling');
+
             _rect = that.svg.select('#' + d.id).select('rect');
             _bbox  = _rect.node().getBBox();
           }
