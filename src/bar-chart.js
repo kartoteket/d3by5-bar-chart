@@ -79,6 +79,7 @@ function BarChart () {
       var that = this
         , positions = {}
         , dimensions = {}
+        , textColor = this.options.theme.textColor || '#FF0000'
         // , axis = {}
         // , axisopt = this.options.axis // shorthand for axis options
       ;
@@ -198,12 +199,12 @@ function BarChart () {
 
 
     this.svg.selectAll(".axis text")
-          .attr('fill', '#777')
+          .attr('fill', textColor)
           .style('font-size', '0.875rem');
 
     this.svg.selectAll('.axis line, .axis path')
           .attr('fill', 'none')
-          .attr('stroke', '#777')
+          .attr('stroke', textColor)
           .attr('stroke-width', '1');
     },
 
@@ -249,8 +250,6 @@ function BarChart () {
 
       return this;
     },
-
-
   };
 
 

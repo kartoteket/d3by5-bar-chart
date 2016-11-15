@@ -8,7 +8,8 @@ This project adheres (well, maybe not quite) to [Semantic Versioning](http://sem
 - Added posibility to set anchors ('top' | 'bottom' | 'left' | 'right')
 - Added inline labels to match the anchoring
 - Added support for grouped bars
-- Added supportr for stacked bars
+- Added support for stacked bars
+- Added support for theming (inherited from base chart)
 
 ### Changed
 - More details in the README
