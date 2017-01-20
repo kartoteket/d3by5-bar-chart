@@ -10,6 +10,7 @@ This project adheres (well, maybe not quite) to [Semantic Versioning](http://sem
 - Added support for grouped bars
 - Added support for stacked bars
 - Added support for theming (inherited from base chart)
+- Added listeners for events on individual bars
 
 ### Changed
 - More details in the README
