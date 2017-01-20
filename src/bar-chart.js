@@ -119,7 +119,10 @@ function BarChart () {
 
       this.selection.each(function() {
 
-        var dom = d3.select(this);
+        var dom = d3.select(this)
+          , baritems
+          , mouseEvents = base.getEventsOfType(['mouse', 'click'])
+        ;
 
         // remove old
         if (that.svg) {
@@ -151,19 +154,25 @@ function BarChart () {
         // Supply additional data if multi dimensional
         //
         if (that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL) {
-          bars.selectAll("rect")
-            .data(function(d) {
-              return d.values;
-            })
-          .enter()
-            .append('g')
-            .attr('class', 'barItem')
-            .append("rect")
-            .attr(dimensions)
-            .attr(positions)
-            .style("fill", function(d) {
-              return that.options.fillColor(d.label);
+          baritems = bars.selectAll("rect")
+                          .data(function(d) {
+                            return d.values;
+                          })
+                        .enter()
+                          .append('g')
+                          .attr('class', 'barItem')
+                          .append("rect")
+                          .attr(dimensions)
+                          .attr(positions)
+                          .style("fill", function(d) {
+                            return that.options.fillColor(d.label);
+                          });
+
+            _.each(mouseEvents, function (e) {
+              baritems.on(e.action, e.method);
             });
+            
+
         }
         //
         // Single dimension just sets the bars
@@ -175,6 +184,7 @@ function BarChart () {
               .style("fill", function(d) {
                 return that.options.fillColor(d.label);
               });
+
         }
 
         // Draw labels if required
