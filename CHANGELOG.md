@@ -18,6 +18,7 @@ This project adheres (well, maybe not quite) to [Semantic Versioning](http://sem
 - Refactored, bar positions as separate class
 - Refactored, dimensions as separate class
 - renamed ordinal and linear to x and y for all scales and axis
+- removed a dependency on the init method. selection can now be injected runtime
 
 ### Fixed
 - Ensure bar width never goes below 1px

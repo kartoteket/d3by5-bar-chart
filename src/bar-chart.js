@@ -69,20 +69,21 @@ function BarChart () {
 
     init: function (selection) {
       if (arguments.length) {
-        this.selection = selection;
-        this.draw();
+        this.chartId = _.uniqueId('chart_');
+        // this.selection = selection;
+        this.draw(selection);
       }
       return this;
     },
 
-    draw: function () {
+    draw: function (selection) {
       var that = this
         , positions = {}
         , dimensions = {}
         , textColor = this.options.theme.textColor || '#FF0000'
-        // , axis = {}
-        // , axisopt = this.options.axis // shorthand for axis options
       ;
+
+      this.selection = selection || this.selection;
       // force a value for the dataType if there is a multi dimensional dataset
       this.options.barLayout = (that.options.dataType === that.DATATYPE_MULTIDIMENSIONAL) ? this.options.barLayout || this.BARLAYOUT_GROUPED : null;
 
