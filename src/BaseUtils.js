@@ -24,11 +24,19 @@ export default class BaseUtils {
     }
 
 
+    get isHorizontal () {
+      return (this.options.anchor === Enums.ANCHOR_LEFT || this.options.anchor === Enums.ANCHOR_RIGHT);
+    }
+
+    get isVertical () {
+      return !this.isHorizontal;
+    }
+
     /**
      * returns the width calculated and adjusted for margins
      * @return {Number} - The width - margins
      */
-    getCalculatedWidth  () {
+    get calculatedWidth () {
       return this.options.width - this.options.margin.left - this.options.margin.right;
     }
 
@@ -36,7 +44,7 @@ export default class BaseUtils {
      * returns the height calculated and adjusted for margins
      * @return {Number} - The height - margins
      */
-    getCalculatedHeight  () {
+    get calculatedHeight () {
       return this.options.height - this.options.margin.top - this.options.margin.bottom;
     }
 

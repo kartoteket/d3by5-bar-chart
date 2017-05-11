@@ -380,32 +380,9 @@ export default class BarChart extends BaseChart {
         });
   }
 
-  get isHorizontal () {
-    return (this.options.anchor === Enums.ANCHOR_LEFT || this.options.anchor === Enums.ANCHOR_RIGHT);
-  }
-
-  get isVertical () {
-    return !this.isHorizontal;
-  }
-
   //
   // MOve to base
   //
-      /**
-   * returns the width calculated and adjusted for margins
-   * @return {Number} - The width - margins
-   */
-  get calculatedWidth () {
-    return this.options.width - this.options.margin.left - this.options.margin.right;
-  }
-
-  /**
-   * returns the height calculated and adjusted for margins
-   * @return {Number} - The height - margins
-   */
-  get calculatedHeight () {
-    return this.options.height - this.options.margin.top - this.options.margin.bottom;
-  }
 
 
     /**
