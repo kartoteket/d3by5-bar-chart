@@ -335,7 +335,6 @@ export default class BarChart extends BaseChart {
   get _groupedXScale() {
     let bDomain;
     const data = this.options.data[0];
-    const xScale = this._xXscale
 
     //
     // Domain
@@ -349,7 +348,7 @@ export default class BarChart extends BaseChart {
     //
     return d3.scale.ordinal()
                     .domain(bDomain)
-                    .rangeRoundBands([xScale.rangeBand(), 0]);
+                    .rangeRoundBands([this.xScale.rangeBand(), 0]);
   }
 
   /**
