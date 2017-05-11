@@ -110,58 +110,55 @@ export default class BarChart extends BaseChart {
       var bars = that.svg.selectAll('rect.chart__bar')
                       .data(that.options.data)
                       .enter()
+                      .append('g')
+                      .attr("id", function(d){return d.id;})
+                      .attr('transform', function (d) {
+                        var _x = that.options.margin.left + (that.isVertical ? that.xScale(d.label) : 0)
+                          , _y = that.isVertical ? that.options.margin.top : that.xScale(d.label)
+                        ;
+                        return 'translate(' + _x + ',' + _y +')';
+                      });
+
+      //
+      // Supply additional data if multi dimensional
+      //
+      if (that.options.dataType === Enums.DATATYPE_MULTIDIMENSIONAL) {
+        baritems = bars.selectAll("rect")
+                        .data(function(d) {
+                          return d.values;
+                        })
+                      .enter()
                         .append('g')
-                        .attr("id", function(d){return d.id;})
-                        .attr('transform', function (d) {
-                          var _x = that.options.margin.left + (that.isVertical ? that.xScale(d.label) : 0)
-                            , _y = that.isVertical ? that.options.margin.top : that.xScale(d.label)
-                          ;
-                          return 'translate(' + _x + ',' + _y +')';
+                        .attr('class', 'barItem')
+                        .append("rect")
+                        .attr(dimensions)
+                        .attr(positions)
+                        .style("fill", function(d) {
+                          return that.options.color(d.label);
                         });
 
-        //
-        // Supply additional data if multi dimensional
-        //
-        if (that.options.dataType === Enums.DATATYPE_MULTIDIMENSIONAL) {
-          baritems = bars.selectAll("rect")
-                          .data(function(d) {
-                            return d.values;
-                          })
-                        .enter()
-                          .append('g')
-                          .attr('class', 'barItem')
-                          .append("rect")
-                          .attr(dimensions)
-                          .attr(positions)
-                          .style("fill", function(d) {
-                            return that.options.fillColor(d.label);
-                          });
+          for(let e of mouseEvents) {
+            baritems.on(e.action, e.method);
+          };
+      }
+      //
+      // Single dimension just sets the bars
+      //
+      else {
+        bars.append("rect")
+            .attr(dimensions)
+            .attr(positions)
+            .style("fill", function(d) {
+              return that.options.color(d.label);
+            });
 
-            for(let e of mouseEvents) {
-              baritems.on(e.action, e.method);
-            };
-        }
-        //
-        // Single dimension just sets the bars
-        //
-        else {
-          bars.append("rect")
-              .attr(dimensions)
-              .attr(positions)
-              .style("fill", function(d) {
-                return that.options.fillColor(d.label);
-              });
+      }
 
-        }
-
-        // Draw labels if required
-        if (that.options.labelPosition !== Enums.LABEL_NONE || that.options.valuesPosition !== 'none') {
-          // that.drawLabels();
       // Draw labels if required
       if (that.options.labelPosition !== Enums.LABEL_NONE || that.options.valuesPosition !== 'none') {
         // that.drawLabels();
       }
-      console.log(that.options);
+
       if (that.axis.y && that.axis.y.show()) {
         if (!that.yaxis) {
           that.yaxis = new BarAxis('y');
