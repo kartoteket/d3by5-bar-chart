@@ -167,10 +167,6 @@ export default class BaseChart extends BaseUtils {
     return this;
   }
 
-    axis() {
-      // need to fix this
-      return {}
-    }
 
   /**
    * Turns the labels on and off by fixin them

@@ -3,6 +3,8 @@
  */
 import Enums from './Enums';
 import BaseChart from './BaseChart';
+import BarAxis from './BarAxis';
+
 import {isFunction as _isFunction, isArray as _isArray } from 'lodash';
 
 export default class BarChart extends BaseChart {
@@ -30,6 +32,9 @@ export default class BarChart extends BaseChart {
         // valuesFormat: null,
         idPrefix: 'bar-',
         barLayout: 'grouped',
+        axis: {
+
+        }
     }
 
     this.options = Object.assign({}, this.baseOptions, this.defaultOptions);
@@ -148,17 +153,39 @@ export default class BarChart extends BaseChart {
         // Draw labels if required
         if (that.options.labelPosition !== Enums.LABEL_NONE || that.options.valuesPosition !== 'none') {
           // that.drawLabels();
+      // Draw labels if required
+      if (that.options.labelPosition !== Enums.LABEL_NONE || that.options.valuesPosition !== 'none') {
+        // that.drawLabels();
+      }
+      console.log(that.options);
+      if (that.axis.y && that.axis.y.show()) {
+        if (!that.yaxis) {
+          that.yaxis = new BarAxis('y');
         }
+        that.yaxis.anchor(that.options.anchor)
+                  .margin(that.options.margin)
+                  .height(that.options.height)
+                  .scale(that.yScale)
+                  .draw(that.svg)
+      }
 
-        // that.drawAxis();
-
-        //
-        // Add the draw event to bar charts
-        //
-        if (_isArray(that.options.on) && that.options.on.length) {
-          drawEvent = that.options.on.find(function (o) {
-            return o.action === 'draw';
-          });
+      if (that.axis.x && that.axis.x.show()) {
+        if (!that.xaxis) {
+          that.xaxis = new BarAxis('x');
+        }
+        that.xaxis.anchor(that.options.anchor)
+                  .margin(that.options.margin)
+                  .height(that.options.height)
+                  .scale(that.xScale)
+                  .draw(that.svg)
+      }
+      // //
+      // Add the draw event to bar charts
+      //
+      if (_isArray(that.options.on) && that.options.on.length) {
+        drawEvent = that.options.on.find(function (o) {
+          return o.action === 'draw';
+        });
 
           if (drawEvent && _isFunction (drawEvent.method)) {
             drawEvent.method.call(that);
@@ -220,6 +247,20 @@ export default class BarChart extends BaseChart {
       this.options.anchor = value;
 
       return this;
+    }
+
+    /**
+     * Accessor for the axis
+     * @return {Object} - returns an object with x and y, each an instance of the BarAxis class
+     */
+    get axis() {
+      let ax = {};
+      this.xaxis = this.xaxis || new BarAxis('x', this);
+      this.yaxis = this.yaxis || new BarAxis('y', this);
+      ax.x = this.xaxis;
+      ax.y = this.yaxis;
+
+      return ax;
     }
 
     //
