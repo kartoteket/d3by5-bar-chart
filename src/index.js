@@ -1,6 +1,4 @@
 import BarChart from './BarChart';
-import d3 from 'd3';
-import TestClass from './testclass';
 
 const singleData = [  {"values": 864,"label": "Afghanistan"},
                       {"values": 2,"label": "Albania"},
@@ -44,20 +42,173 @@ const singleData = [  {"values": 864,"label": "Afghanistan"},
                       {"values": 2147,"label": "Tunisia"},
                       {"values": 48,"label": "Turkey"},
                       {"values": 7,"label": "Ukraine"},
-                      {"values": 1,"label": "Zimbabwe"}]
+                      {"values": 1,"label": "Zimbabwe"}];
 
-let selection = d3.select('.js-bar-chart');
 
-let testClass = new TestClass();
-let barChart = new BarChart();
+const groupedData = [{"label":"Jan 2008","values":[
+                                                  {"label":"Syria","values":428},
+                                                  {"label":"Afghanistan","values":488}
+                                                  ]},
+                    {"label":"Feb 2008","values":[
+                                                  {"label":"Syria","values":472},
+                                                  {"label":"Afghanistan","values":372}
+                                                  ]},
+                    {"label":"Mar 2008","values":[
+                                                  {"label":"Syria","values":368},
+                                                  {"label":"Afghanistan","values":184}
+                                                  ]},
+                    {"label":"Apr 2008","values":[
+                                                  {"label":"Syria","values":428},
+                                                  {"label":"Afghanistan","values":260}
+                                                  ]},
+                    {"label":"May 2008","values":[
+                                                  {"label":"Syria","values":352},
+                                                  {"label":"Afghanistan","values":244}
+                                                  ]},
+                    {"label":"Jun 2008","values":[
+                                                  {"label":"Syria","values":372},
+                                                  {"label":"Afghanistan","values":308}
+                                                  ]},
+                    {"label":"Jul 2008","values":[
+                                                  {"label":"Syria","values":516},
+                                                  {"label":"Afghanistan","values":332}
+                                                  ]},
+                    {"label":"Aug 2008","values":[
+                                                  {"label":"Syria","values":484},
+                                                  {"label":"Afghanistan","values":620}
+                                                  ]},
+                    {"label":"Sep 2008","values":[
+                                                  {"label":"Syria","values":476},
+                                                  {"label":"Afghanistan","values":836}
+                                                  ]},
+                    {"label":"Oct 2008","values":[
+                                                  {"label":"Syria","values":528},
+                                                  {"label":"Afghanistan","values":688}
+                                                  ]},
+                    {"label":"Nov 2008","values":[
+                                                  {"label":"Syria","values":372},
+                                                  {"label":"Afghanistan","values":604}
+                                                  ]},
+                    {"label":"Dec 2008","values":[
+                                                  {"label":"Syria","values":384},
+                                                  {"label":"Afghanistan","values":800}
+                                                  ]},
+                    {"label":"Jan 2009","values":[
+                                                  {"label":"Syria","values":436},
+                                                  {"label":"Afghanistan","values":1648}
+                                                  ]},
+                    {"label":"Feb 2009","values":[
+                                                  {"label":"Syria","values":532},
+                                                  {"label":"Afghanistan","values":1204}
+                                                  ]},
+                    {"label":"Mar 2009","values":[
+                                                  {"label":"Syria","values":372},
+                                                  {"label":"Afghanistan","values":1024}
+                                                  ]},
+                    {"label":"Apr 2009","values":[
+                                                  {"label":"Syria","values":384},
+                                                  {"label":"Afghanistan","values":872}
+                                                  ]},
+                    {"label":"May 2009","values":[
+                                                  {"label":"Syria","values":404},
+                                                  {"label":"Afghanistan","values":1052}
+                                                  ]},
+                    {"label":"Jun 2009","values":[
+                                                  {"label":"Syria","values":368},
+                                                  {"label":"Afghanistan","values":1276}
+                                                  ]},
+                    {"label":"Jul 2009","values":[
+                                                  {"label":"Syria","values":504},
+                                                  {"label":"Afghanistan","values":1804}
+                                                  ]},
+                    {"label":"Aug 2009","values":[
+                                                  {"label":"Syria","values":436},
+                                                  {"label":"Afghanistan","values":2024}
+                                                  ]},
+                    {"label":"Sep 2009","values":[
+                                                  {"label":"Syria","values":484},
+                                                  {"label":"Afghanistan","values":2188}
+                                                  ]},
+                    {"label":"Oct 2009","values":[
+                                                  {"label":"Syria","values":708},
+                                                  {"label":"Afghanistan","values":2284}
+                                                  ]},
+                    {"label":"Nov 2009","values":[
+                                                  {"label":"Syria","values":568},
+                                                  {"label":"Afghanistan","values":2580}
+                                                  ]},
+                    {"label":"Dec 2009","values":[
+                                                  {"label":"Syria","values":428},
+                                                  {"label":"Afghanistan","values":2320}
+                                                  ]},
+                    {"label":"Jan 2010","values":[
+                                                  {"label":"Syria","values":512},
+                                                  {"label":"Afghanistan","values":2768}
+                                                  ]},
+                    {"label":"Feb 2010","values":[
+                                                  {"label":"Syria","values":456},
+                                                  {"label":"Afghanistan","values":2544}
+                                                  ]},
+                    {"label":"Mar 2010","values":[
+                                                  {"label":"Syria","values":520},
+                                                  {"label":"Afghanistan","values":2416}
+                                                  ]},
+                    {"label":"Apr 2010","values":[
+                                                  {"label":"Syria","values":452},
+                                                  {"label":"Afghanistan","values":2056}
+                                                  ]},
+                    {"label":"May 2010","values":[
+                                                  {"label":"Syria","values":540},
+                                                  {"label":"Afghanistan","values":1844}
+                                                  ]},
+                    {"label":"Jun 2010","values":[
+                                                  {"label":"Syria","values":624},
+                                                  {"label":"Afghanistan","values":2248}
+                                                  ]},
+                    {"label":"Jul 2010","values":[
+                                                  {"label":"Syria","values":612},
+                                                  {"label":"Afghanistan","values":2960}
+                                                  ]},
+                    {"label":"Aug 2010","values":[
+                                                  {"label":"Syria","values":832},
+                                                  {"label":"Afghanistan","values":3416}
+                                                  ]},
+                    {"label":"Sep 2010","values":[
+                                                  {"label":"Syria","values":684},
+                                                  {"label":"Afghanistan","values":2284}
+                                                  ]},
+                    {"label":"Oct 2010","values":[
+                                                  {"label":"Syria","values":648},
+                                                  {"label":"Afghanistan","values":2268}
+                                                  ]},
+                    {"label":"Nov 2010","values":[
+                                                  {"label":"Syria","values":520},
+                                                  {"label":"Afghanistan","values":1988}
+                                                  ]},
+                    {"label":"Dec 2010","values":[
+                                                  {"label":"Syria","values":604},
+                                                  {"label":"Afghanistan","values":2384}
+                                                  ]}];
 
-testClass.first('here').second(20).third();
 
-barChart.width(700)
-        .height(500)
-        // .valuesPosition('fit')
-        .barLayout('stacked')
-        .anchor('bottom')
-        .margin(0,0,50,50)
-        .data(singleData)
-        .draw(selection);
+let sel = document.getElementById('js-bar-chart');
+// create
+new BarChart().width(700)
+              .height(500)
+              .barLayout('stacked')
+              .anchor('bottom')
+              .margin(0,10,70,70)
+              .color({'Afghanistan': '#e94f37', 'Syria': '#21c5c1'})
+              .data(groupedData)
+              .axis.x.show(true)
+                      .rotate(70)
+                      .release() // call release to return control to barchart
+              .axis.y.show(true)
+                      .label('number of people')
+                      .ticks({count: 5})
+                      .release() // call release to return control to barchart
+              .draw(document.getElementById('js-bar-chart'));
+
+function updateMargins() {
+  console.log('update margins');
+}
