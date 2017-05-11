@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>d3by5 Bar Chart Examples</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/prism.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+
+  <header id="header" class="page__header">
+    <div class="container">
+      <div class="content has-text-centered">
+        <h1>d3by5 Bar Chart</h1>
+      </div>
+    </div>
+  </header>
+
+  <div class="page__main section">
+
+    <div class="container">
+      <div class="columns Xis-gapless is-multiline">
+        <div class="column is-8 wrapper">
+          <div id="chart1"></div>
+        </div>
+        <div class="column is-3">
+          <pre>
+          <code class="language-js">
+		let barChart = new BarChart();
+
+
+		barChart.width(700)
+		        .height(500)
+		        .barLayout('stacked')
+		        .anchor('bottom')
+		        .margin(0,0,50,50)
+		        .fillColor(['#f00', '#0f0'])
+		        .data(groupedData);
+
+		barChart.axis.x.show(true);
+		barChart.axis.y.show(true)
+		                .label('ylabel');
+
+		barChart.draw(selection);
+          </code></pre>
+        </div>
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        d3by5
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="bundle.js"></script>
+  <script src="js/prism.js"></script>
+</body>
+</html>
