@@ -112,7 +112,7 @@ export default class BaseUtils {
      * @return {[type]}       - A parsed and normalized data Array
      */
     _parseData  (inData) {
-      this.options.fillColor = this._getColorAccessor(inData, this.options.fillColor);
+      this.options.color = this._getColorAccessor(inData, this.options.color);
       this.options.dataSchema = this._getDataSchema(inData);
       this.options.dataType = this._getDataDimensions(inData);
 
@@ -195,11 +195,11 @@ export default class BaseUtils {
     _getColorAccessor  (inData, color) {
       const that = this;
 
-      // check if the fillColor is a function (accessor), return it if so
+      // check if the color is a function (accessor), return it if so
       if(_isFunction(color)) {
         return color;
       }
-      // if the fillcolors are a range, check the length
+      // if the colors are a range, check the length
       // if the size is bigger or equal to the data, use this accessor
       // if not, use a modulo opeartor in the accessor
       if (_isArray(color)) {
@@ -216,7 +216,6 @@ export default class BaseUtils {
         };
       }
 
-      // fillColor is a single color
       // create an accessor function
       if (color) {
         return function (x) {return color;};

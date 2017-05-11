@@ -7,7 +7,7 @@ import BaseUtils from './BaseUtils';
    *       - height - setter/getter for the chart height
    *       - width  - setter/getter for the chart width
    *       - data   - setter/getter for the indata of the chart
-   *       - fillColor
+   *       - color
    *       - padding
    *       - margin
    *
@@ -29,7 +29,7 @@ export default class BaseChart extends BaseUtils {
       width: 640,
       height: 400,
       padding: 5,
-      fillColor: '',
+      color: '',
       idPrefix: 'id-',
       on: [],
       valuesFormat: null,
@@ -42,16 +42,16 @@ export default class BaseChart extends BaseUtils {
 
 
   /**
-   * Sets the fillcolor
-   * @param  {Number} value - the fillcolor
+   * Sets the color
+   * @param  {Number} value - the color
    * @return {instance}     - the chart
    */
-  fillColor (value) {
-    if (!arguments.length) return this.options.fillColor;
+  color (value) {
+    if (!arguments.length) return this.options.color;
     if (this.options.data) {
-      this.options.fillColor = this._getColorAccessor(this.options.data, value);
+      this.options.color = this._getColorAccessor(this.options.data, value);
     } else {
-      this.options.fillColor = value;
+      this.options.color = value;
     }
     return this;
   }
