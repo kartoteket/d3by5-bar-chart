@@ -210,7 +210,7 @@ export default class BaseUtils {
       // if the colors are a range, check the length
       // if the size is bigger or equal to the data, use this accessor
       // if not, use a modulo opeartor in the accessor
-      if (_isArray(color)) {
+      if (_isArray(color) && color.length) {
 
         if(color.length > inData.length) {
           return function (i) {
@@ -224,6 +224,18 @@ export default class BaseUtils {
         };
       }
 
+      // if the color is an object with a key value
+      // use it as teh accessor
+      if (_isObject(color)) {
+        return function (l) {
+          if (_has(color, l)) {
+            return color[l];
+          }
+          return '#007AFF';
+        }
+      }
+      //
+      // color is a single color
       // create an accessor function
       if (color) {
         return function (x) {return color;};
