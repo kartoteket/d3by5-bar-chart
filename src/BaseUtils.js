@@ -177,7 +177,6 @@ export default class BaseUtils {
     _mapData  (inData) {
       const idPrefix = this.options.idPrefix;
 
-      // apply a color to all the datanodes
       const data = inData.map(function (d, i) {
         if (_isArray(d.values)) {
           d.values = d.values.map(function(value, index) {

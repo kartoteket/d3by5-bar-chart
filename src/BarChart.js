@@ -188,12 +188,12 @@ export default class BarChart extends BaseChart {
           return o.action === 'draw';
         });
 
-          if (drawEvent && _isFunction (drawEvent.method)) {
-            drawEvent.method.call(that);
-          }
+        if (drawEvent && _isFunction (drawEvent.method)) {
+          drawEvent.method.call(that);
         }
+      }
 
-      });
+    });
 
 
     this.svg.selectAll(".axis text")
