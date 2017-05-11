@@ -49,9 +49,12 @@ export default class BarChart extends BaseChart {
         , textColor = this.options.theme.textColor
     ;
 
-      this.selection = selection || this.selection;
       // force a value for the dataType if there is a multi dimensional dataset
       this.options.barLayout = (this.options.dataType === Enums.DATATYPE_MULTIDIMENSIONAL) ? this.options.barLayout || Enums.BARLAYOUT_GROUPED : null;
+    this.selection = selection || this.selection;
+    if (!_isFunction(this.selection.node)) {
+      this.selection = d3.select(this.selection);
+    }
 
       this.maxValue = this._maxValue;
       this.xScale = this._xScale;
