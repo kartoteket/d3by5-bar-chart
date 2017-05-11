@@ -49,35 +49,36 @@ export default class BarChart extends BaseChart {
         , textColor = this.options.theme.textColor
     ;
 
-      // force a value for the dataType if there is a multi dimensional dataset
-      this.options.barLayout = (this.options.dataType === Enums.DATATYPE_MULTIDIMENSIONAL) ? this.options.barLayout || Enums.BARLAYOUT_GROUPED : null;
     this.selection = selection || this.selection;
     if (!_isFunction(this.selection.node)) {
       this.selection = d3.select(this.selection);
     }
 
-      this.maxValue = this._maxValue;
-      this.xScale = this._xScale;
-      this.yScale = this._yScale;
+    // force a value for the dataType if there is a multi dimensional dataset
+    this.options.barLayout = (this.options.dataType === Enums.DATATYPE_MULTIDIMENSIONAL) ? this.options.barLayout || Enums.BARLAYOUT_GROUPED : null;
 
-      //
-      // Create a grouped breadth scale and update the dataset
-      //
-      if (this.options.dataType === Enums.DATATYPE_MULTIDIMENSIONAL) {
-        this.groupedXScale = this._groupedXScale;
+    this.maxValue = this._maxValue;
+    this.xScale = this._xScale;
+    this.yScale = this._yScale;
 
-        if (this.options.barLayout === Enums.BARLAYOUT_STACKED) {
-          var lpos;
-          for(let data of this.options.data) {
-            lpos = 0;
-            data.values = data.values.map(function (d) {
-                            lpos +=  d.values;
-                            d.lpos = lpos;
-                            return d;
-                          });
-          };
-        }
+    //
+    // Create a grouped breadth scale and update the dataset
+    //
+    if (this.options.dataType === Enums.DATATYPE_MULTIDIMENSIONAL) {
+      this.groupedXScale = this._groupedXScale;
+
+      if (this.options.barLayout === Enums.BARLAYOUT_STACKED) {
+        var lpos;
+        for(let data of this.options.data) {
+          lpos = 0;
+          data.values = data.values.map(function (d) {
+                          lpos +=  d.values;
+                          d.lpos = lpos;
+                          return d;
+                        });
+        };
       }
+    }
 
       const positions = { x: this.getBarXPos(),
                           y: this.getBarYPos()};
@@ -85,30 +86,30 @@ export default class BarChart extends BaseChart {
                           height: this.getBarHeight()};
 
 
-      this.selection.each(function() {
+    this.selection.each(function() {
 
-        var dom = d3.select(this)
-          , baritems
-          , mouseEvents = that.getEventsOfType(['mouse', 'click'])
-        ;
+      var dom = d3.select(this)
+        , baritems
+        , mouseEvents = that.getEventsOfType(['mouse', 'click'])
+      ;
 
-        // remove old
-        if (that.svg) {
-          that.svg.remove();
-        }
+      // remove old
+      if (that.svg) {
+        that.svg.remove();
+      }
 
-        //
-        // The main svg element
-        //
-        that.svg = dom.append('svg')
-            .attr('class', 'chart barchart')
-            .attr('height', that.options.height)
-            .attr('width', that.options.width);
+      //
+      // The main svg element
+      //
+      that.svg = dom.append('svg')
+          .attr('class', 'chart barchart')
+          .attr('height', that.options.height)
+          .attr('width', that.options.width);
 
-        // The actual bars
-        var bars = that.svg.selectAll('rect.chart__bar')
-                        .data(that.options.data)
-                        .enter()
+      // The actual bars
+      var bars = that.svg.selectAll('rect.chart__bar')
+                      .data(that.options.data)
+                      .enter()
                         .append('g')
                         .attr("id", function(d){return d.id;})
                         .attr('transform', function (d) {
