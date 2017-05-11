@@ -486,7 +486,7 @@ export default class BarChart extends BaseChart {
           if (that.options.anchor === Enums.ANCHOR_LEFT || that.options.anchor === Enums.ANCHOR_TOP ) {
             return that.yScale(d.lpos) - that.yScale(d.values);
           }
-          return that.calculatedHeight() - that.yScale(d.lpos);
+          return that.calculatedHeight - that.yScale(d.lpos);
         }
 
         if (that.options.anchor === Enums.ANCHOR_TOP || that.options.anchor === Enums.ANCHOR_LEFT ) {
