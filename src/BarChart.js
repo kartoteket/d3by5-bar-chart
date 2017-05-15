@@ -354,7 +354,7 @@ export default class BarChart extends BaseChart {
     //
     return scaleBand()
                     .domain(bDomain)
-                    .range([this.xScale.range(), 0]); // TODO: not working. fix it!
+                    .range([this.xScale.bandwidth(), 0]);
   }
 
   /**
@@ -420,10 +420,9 @@ export default class BarChart extends BaseChart {
     get barBreadth() {
       const that = this
           , useGroupedData = (this.options.barLayout === Enums.BARLAYOUT_GROUPED);
-      let value;
 
       return function (d) {
-        value = useGroupedData ? that.groupedXScale.rangeBand() : that.xScale.rangeBand();
+        let value = useGroupedData ? that.groupedXScale.bandwidth() : that.xScale.bandwidth();
         return Math.max(value, 1);
       };
     }
