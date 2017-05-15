@@ -395,29 +395,29 @@ export default class BarChart extends BaseChart {
      * returns the width of the bar (could be breadth or length depending on dimension)
      * @return {function} - a function to get the width of a bar
      */
-    getBarWidth() {
+    get barWidth() {
       if (this.isVertical) {
-        return this.getBarBreadth();
+        return this.barBreadth;
       }
-      return this.getBarLength();
+      return this.barLength;
     }
 
     /**
      * returns the height of the bar (could be breadth or length depending on dimension)
      * @return {function} - a function to get the height of a bar
      */
-    getBarHeight() {
+    get barHeight() {
       if (this.isVertical) {
-        return this.getBarLength();
+        return this.barLength;
       }
-      return this.getBarBreadth();
+      return this.barBreadth;
     }
 
     /**
      * Returns a function to get the wideness of a bar
      * @return {function} - function to calculate the wideness of a bar
      */
-    getBarBreadth() {
+    get barBreadth() {
       const that = this
           , useGroupedData = (this.options.barLayout === Enums.BARLAYOUT_GROUPED);
       let value;
@@ -432,7 +432,7 @@ export default class BarChart extends BaseChart {
      * Returns a function to get the length of a bar
      * @return {function} - function to calculate the length of a bar
      */
-    getBarLength() {
+    get barLength() {
       const that = this;
 
       return function(d) {
@@ -441,10 +441,10 @@ export default class BarChart extends BaseChart {
     }
 
     /**
-     * [getBarXPos description]
+     * [barXPos description]
      * @return {[type]} [description]
      */
-    getBarXPos() {
+    get barXPos() {
       if (this.isVertical) {
         return this.getBreadthPos();
       }
@@ -453,10 +453,10 @@ export default class BarChart extends BaseChart {
 
 
     /**
-     * [getBarYPos description]
+     * [barYPos description]
      * @return {[type]} [description]
      */
-    getBarYPos() {
+    get barYPos() {
       if (this.isVertical) {
         return  this.getLengthPos();
       }
