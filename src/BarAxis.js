@@ -90,23 +90,6 @@ export default class BarAxis extends BaseAxis {
     return scale;
   }
 
-  _getTransform () {
-    if (this.direction === 'y') {
-      if (this.isVertical) {
-        return 'translate(' + this.options.margin.left + ',' + this.options.margin.top + ')';
-      }
-      return 'translate(' + this.options.margin.left + ',' + (this.options.align === Enums.ANCHOR_TOP ? 0 : this.calculatedHeight) + ')';
-    }
-
-    if (this.direction  === 'x') {
-      if (this.isVertical) {
-        return 'translate(' + this.options.margin.left + ',' + (this.options.align === Enums.ANCHOR_TOP ? 0 : this.options.height - this.options.margin.bottom ) + ')';
-      }
-      return 'translate(' + this.options.margin.left + ',' + this.options.margin.top + ')';
-    }
-  }
-
-
   draw (selection) {
     const that = this
     let axis = this.axis
