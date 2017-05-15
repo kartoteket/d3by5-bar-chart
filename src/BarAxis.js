@@ -17,6 +17,9 @@ export default class BarAxis extends BaseAxis {
             label: '',
           };
     this.parent = parent;
+    this.defaultOptions.width = parent.width();
+    this.defaultOptions.height = parent.height();
+
     this.options = Object.assign({}, this.defaultOptions, this.baseOptions);
 
     if (direction === 'x') {
