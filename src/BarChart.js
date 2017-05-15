@@ -25,7 +25,7 @@ export default class BarChart extends BaseChart {
     //
     this.defaultOptions = {
         padding: 2,
-        anchor: 'right',
+        anchor: 'bottom',
         chartClass: 'chart-bar',
         labelPosition: 'none',
         labelAlign: 'left',
