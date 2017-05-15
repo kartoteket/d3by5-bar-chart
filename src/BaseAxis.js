@@ -1,5 +1,6 @@
 import Enums from './Enums';
 import BaseUtils from './BaseUtils';
+import {timeFormat} from 'd3';
 
 export default class BaseAxis extends BaseUtils {
 	constructor () {
@@ -94,11 +95,11 @@ export default class BaseAxis extends BaseUtils {
         format = null;
         break;
       default:
-        format = d3.time.format(format);
+        format = timeFormat(format);
         break;
     }
 
-    return {count:count, format:format};
+    return ticks;
   }
 
 }

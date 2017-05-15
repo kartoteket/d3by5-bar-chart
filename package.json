@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/kartoteket/d3by5-bar-chart#readme",
   "dependencies": {
-    "d3": "^3.5.17",
+    "d3": "^4.8.0",
     "lodash": "^4.17.4",
     "underscore": "^1.8.3"
   },

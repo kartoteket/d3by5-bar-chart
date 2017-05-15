@@ -1,5 +1,6 @@
 import Enums from './Enums';
 import BaseUtils from './BaseUtils';
+import {timeFormat} from 'd3';
 
   /**
    * The base chart is a simple object that contains methods that will be merged into any of the d3by5 charts
@@ -206,7 +207,7 @@ export default class BaseChart extends BaseUtils {
 
   setFormat(prop, value) {
     if (value) {
-      const formatter = d3.time.format(value);
+      const formatter = timeFormat(value);
     }
     // check it for data format
     // if the format func returns the input, if is messed up

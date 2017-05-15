@@ -51,7 +51,10 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js']
+    extensions: ['.js'],
+    alias: {
+      d3: 'd3/build/d3.node.js'
+    }
   },
   output: {
     path: path.join(__dirname, '/dist'),

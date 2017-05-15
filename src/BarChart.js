@@ -4,6 +4,11 @@
 import Enums from './Enums';
 import BaseChart from './BaseChart';
 import BarAxis from './BarAxis';
+import {select as d3_select,
+        max as d3_max,
+        sum as d3_sum,
+        scaleBand,
+        scaleLinear} from 'd3';
 
 import {isFunction as _isFunction, isArray as _isArray } from 'lodash';
 
@@ -55,7 +60,7 @@ export default class BarChart extends BaseChart {
       return;
     }
     if (!_isFunction(this.selection.node)) {
-      this.selection = d3.select(this.selection);
+      this.selection = d3_select(this.selection);
     }
 
     // force a value for the dataType if there is a multi dimensional dataset
@@ -276,7 +281,7 @@ export default class BarChart extends BaseChart {
       /**
    * creates and returns a breadth scale, this is the scale that handles the wideness of a bar, irrespective of dimension
    *
-   * @return {d3.scale} - a scale to calculate the wideness of a bar
+   * @return {scaleBand} - an ordinal scale to calculate the wideness of a bar
    */
   get _xScale () {
     let bRange;
@@ -300,16 +305,16 @@ export default class BarChart extends BaseChart {
     //
     // Scale
     //
-    return d3.scale.ordinal()
+    return scaleBand()
                     .domain(bDomain)
-                    .rangeRoundBands(bRange, 0.1);
+                    .range(bRange, 0.1);
   }
 
 
   /**
    * creates and returns a length scale, this is the scale that handles the length of a bar, irrespective of dimension
    *
-   * @return {d3.scale} - a scale to calculate the length of a bar
+   * @return {scaleLinear} - a linear scale to calculate the length of a bar
    */
   get _yScale () {
     let lRange;
@@ -326,7 +331,7 @@ export default class BarChart extends BaseChart {
     //
     // Scale
     //
-    return d3.scale.linear()
+    return scaleLinear()
                     .domain([0, this._maxValue])
                     .range(lRange);
   }
@@ -334,7 +339,7 @@ export default class BarChart extends BaseChart {
   /**
    * creates and returns a breadth scale for grouped data, this is the scale that handles the wideness of a bar within a group, irrespective of dimension
    *
-   * @return {d3.scale} - a scale to calculate the wideness of grouped bar
+   * @return {scaleBand} - an ordinal scale to calculate the wideness of grouped bar
    */
   get _groupedXScale() {
     let bDomain;
@@ -350,9 +355,9 @@ export default class BarChart extends BaseChart {
     //
     // Scale
     //
-    return d3.scale.ordinal()
+    return scaleBand()
                     .domain(bDomain)
-                    .rangeRoundBands([this.xScale.rangeBand(), 0]);
+                    .range([this.xScale.range(), 0]); // TODO: not working. fix it!
   }
 
   /**
@@ -363,18 +368,18 @@ export default class BarChart extends BaseChart {
    */
   get _maxValue () {
     const that = this;
-    return d3.max(this.options.data, function (d) {
+    return d3_max(this.options.data, function (d) {
             // multi dimensional data
             if (that.options.dataType === Enums.DATATYPE_MULTIDIMENSIONAL) {
               // grouped data
               if (that.options.barLayout === Enums.BARLAYOUT_GROUPED) {
-                return d3.max(d.values, function (d2) {
+                return d3_max(d.values, function (d2) {
                   return d2.values;
                 });
               }
               // stacked data
               else {
-                return d3.sum(d.values, function (d2) {
+                return d3_sum(d.values, function (d2) {
                   return d2.values;
                 });
               }

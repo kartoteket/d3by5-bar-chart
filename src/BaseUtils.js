@@ -1,4 +1,7 @@
 import Enums from './Enums';
+import {timeFormat,
+        select as d3_select,
+        format as d3_format} from 'd3';
 import {isFunction as _isFunction,
         isNumber as _isNumber,
         isArray as _isArray,
@@ -295,7 +298,7 @@ export default class BaseUtils {
         // set date format
         if(column.type === 'date') {
           dateFormat = schema.find( function(column){ return column.type === 'date' && column.format; }).format;
-          formatDate = d3.time.format(dateFormat);
+          formatDate = timeFormat(dateFormat);
           d[column.label] = formatDate.parse(d[column.label]);
         }
 
@@ -319,14 +322,14 @@ export default class BaseUtils {
           format = format;
       }
 
-      const formatter = d3.format(format);
+      const formatter = d3_format(format);
       return formatter(value);
     }
 
     // ref: https://bl.ocks.org/mbostock/7555321
     wrapText (width, padding) {
       return function() {
-        var text = d3.select(this),
+        var text = d3_select(this),
             words = text.text().split(/\s+/).reverse(),
             word,
             line = [],

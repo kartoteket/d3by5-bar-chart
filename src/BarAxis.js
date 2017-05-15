@@ -1,7 +1,11 @@
 import BaseAxis from './BaseAxis';
 import Enums from './Enums';
 import {isObject as _isObject} from 'lodash';
-import d3 from 'd3';
+import {scaleLinear,
+        axisTop,
+        axisLeft,
+        axisBottom,
+        axisRight} from 'd3';
 
 export default class BarAxis extends BaseAxis {
 	constructor (direction, parent) {
@@ -70,13 +74,13 @@ export default class BarAxis extends BaseAxis {
 
   /**
    * retuns the correct scale to use for the axis
-   * @param  {d3.Scale} scale - a valid d3 scale (passed from parent)
-   * @return {d3.scale}     - The correct scale (reversed if needed)
+   * @param  {scaleLinear} scale - a valid d3 scale (passed from parent)
+   * @return {scaleLinear}     - The correct scale (reversed if needed)
    */
   _getScale (scale) {
     // the values, normally y
     if (this.direction === 'y' && (this.options.anchor === Enums.ANCHOR_RIGHT || this.options.anchor === Enums.ANCHOR_BOTTOM)) {
-      const invertedScale = d3.scale.linear()
+      const invertedScale = scaleLinear()
                               .domain(scale.domain().reverse())
                               .range(scale.range());
       return invertedScale;
