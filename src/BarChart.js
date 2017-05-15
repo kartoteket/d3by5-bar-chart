@@ -97,8 +97,8 @@ export default class BarChart extends BaseChart {
       // ;
 
       // remove old
-      if (that.svg) {
-        that.svg.remove();
+      if (this.svg) {
+        this.svg.remove();
       }
 
       //
@@ -110,13 +110,13 @@ export default class BarChart extends BaseChart {
           .attr('width', this.options.width);
 
       // The actual bars
-      var bars = that.svg.selectAll('rect.chart__bar')
-                      .data(that.options.data)
+      var bars = this.svg.selectAll('rect.chart__bar')
+                      .data(this.options.data)
                       .enter()
                       .append('g')
                       .attr("id", function(d){return d.id;})
                       .attr('transform', function (d) {
-                        var _x = that.options.margin.left + (that.isVertical ? that.xScale(d.label) : 0)
+                        let _x = that.options.margin.left + (that.isVertical ? that.xScale(d.label) : 0)
                           , _y = that.isVertical ? that.options.margin.top : that.xScale(d.label)
                         ;
                         return 'translate(' + _x + ',' + _y +')';
@@ -126,7 +126,7 @@ export default class BarChart extends BaseChart {
       // Supply additional data if multi dimensional
       //
       if (that.options.dataType === Enums.DATATYPE_MULTIDIMENSIONAL) {
-        baritems = bars.selectAll("rect")
+        let baritems = bars.selectAll("rect")
                         .data(function(d) {
                           return d.values;
                         })
@@ -138,6 +138,7 @@ export default class BarChart extends BaseChart {
                         .attr('height', this.barHeight)
                         .attr('x', this.barXPos)
                         .attr('y', this.barYPos)
+                        .attr("fill", function(d) {
                           return that.options.color(d.label);
                         });
 
@@ -158,10 +159,10 @@ export default class BarChart extends BaseChart {
 
       }
 
-      // Draw labels if required
-      if (that.options.labelPosition !== Enums.LABEL_NONE || that.options.valuesPosition !== 'none') {
-        // that.drawLabels();
-      }
+    //   // Draw labels if required
+    //   if (that.options.labelPosition !== Enums.LABEL_NONE || that.options.valuesPosition !== 'none') {
+    //     // that.drawLabels();
+    //   }
 
       if (that.axis.y && that.axis.y.show()) {
         if (!that.yaxis) {
@@ -172,6 +173,8 @@ export default class BarChart extends BaseChart {
                   .height(that.options.height)
                   .scale(that.yScale)
                   .draw(this.svg);
+                  
+        // const yaxis = that.yaxis.get();
       }
 
       if (that.axis.x && that.axis.x.show()) {
@@ -184,9 +187,9 @@ export default class BarChart extends BaseChart {
                   .scale(that.xScale)
                   .draw(this.svg);
       }
-      // //
-      // Add the draw event to bar charts
-      //
+    //   // //
+    //   // Add the draw event to bar charts
+    //   //
       if (_isArray(that.options.on) && that.options.on.length) {
         drawEvent = that.options.on.find(function (o) {
           return o.action === 'draw';
@@ -285,7 +288,7 @@ export default class BarChart extends BaseChart {
     if (this.isVertical) {
       bRange = [0 , this.calculatedWidth];
     } else {
-      bRange = [(this.options.margin.top, this.options.height) - this.options.margin.bottom]; // if horisontal the "breadth" equals the height and must be caluculad from vertical dimensions
+      bRange = [this.options.margin.top, this.options.height - this.options.margin.bottom]; // if horisontal the "breadth" equals the height and must be caluculad from vertical dimensions
     }
 
     //
