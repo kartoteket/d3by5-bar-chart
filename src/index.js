@@ -190,8 +190,6 @@ const groupedData = [{"label":"Jan 2008","values":[
                                                   {"label":"Afghanistan","values":2384}
                                                   ]}];
 
-
-let sel = document.getElementById('js-bar-chart');
 // create
 new BarChart().width(700)
               .height(500)
@@ -202,13 +200,9 @@ new BarChart().width(700)
               .data(groupedData)
               .axis.x.show(true)
                       .rotate(70)
-                      .release() // call release to return control to barchart
+                      .exit() // call exit to return control to barchart
               .axis.y.show(true)
                       .label('number of people')
                       .ticks({count: 5})
-                      .release() // call release to return control to barchart
-              .draw(document.getElementById('js-bar-chart'));
-
-function updateMargins() {
-  console.log('update margins');
-}
+                      .exit() // call exit to return control to barchart
+              .draw(document.getElementById('chart1'));

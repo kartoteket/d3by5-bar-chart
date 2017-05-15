@@ -42,7 +42,7 @@ export default class BaseAxis extends BaseUtils {
     return arguments.length ? (this.options.width = value, this) : this.options.width;
   }
 
-  release () {
+  exit () {
     return this.parent;
   }
 
