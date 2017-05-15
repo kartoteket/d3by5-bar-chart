@@ -50,6 +50,10 @@ export default class BarChart extends BaseChart {
     ;
 
     this.selection = selection || this.selection;
+    if (!this.selection) {
+      console.warn('Could not find a HTML node to write to, please check your code');
+      return;
+    }
     if (!_isFunction(this.selection.node)) {
       this.selection = d3.select(this.selection);
     }
