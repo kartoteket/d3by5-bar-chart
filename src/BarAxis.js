@@ -162,10 +162,9 @@ export default class BarAxis extends BaseAxis {
    * @param {int} count number of ticks
    */
   _setTickValues (count) {
-
-    var total = this.scale.domain().length
-      , step = Math.ceil(total/count) || 0
-      , tickValues;
+    const total = this.scale.domain().length
+        , step = Math.ceil(total/count) || 0
+    let tickValues;
 
     if(total === 0)
       return [];
