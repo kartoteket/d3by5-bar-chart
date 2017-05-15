@@ -13,8 +13,7 @@ export default class BaseAxis extends BaseUtils {
                 right: 0,
                 bottom: 0,
                 left: 0
-              },
-      ticks: this._parseTicks(['auto','auto'])
+              }
     }
 
   }
@@ -68,8 +67,8 @@ export default class BaseAxis extends BaseUtils {
 
   /**
    * Parse tick options before use
-   * @param  {object} ticks {count, format}
-   * @return {object}       {count, format}
+   * @param  {Array} ticks [count, format]
+   * @return {Array}       [count, format]
    */
   _parseTicks(ticks){
 
