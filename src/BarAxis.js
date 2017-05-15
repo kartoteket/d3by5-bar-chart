@@ -140,19 +140,40 @@ export default class BarAxis extends BaseAxis {
     }
   }
 
+  get axis () {
+    let axis;
 
-        // if(y.label) {
-        //   _yAxis.append('text')
-        //     .attr('transform', 'rotate(-90)')
-        //     .attr('y', 6)
-        //     .attr('dy', '.71em')
-        //     .style('text-anchor', 'end')
-        //     .text(y.label);
-        // }
-      // }
+    switch(this.options.align) {
+      case Enums.ANCHOR_TOP:
+        axis =  axisTop(this.options.scale)
+        break;
+      case Enums.ANCHOR_LEFT:
+        axis =  axisLeft(this.options.scale)
+        break;
+      case Enums.ANCHOR_BOTTOM:
+        axis =  axisBottom(this.options.scale)
+        break;
+      case Enums.ANCHOR_RIGHT:
+        axis =  axisRight(this.options.scale)
+        break;
+    }
 
+    axis.ticks(this.options.ticks);
+    return axis;
   }
 
+  get axisTranslation () {
+    switch(this.options.align) {
+      case Enums.ANCHOR_TOP:
+        return 'translate(' + this.options.margin.left + ', ' + this.options.margin.top + ')';
+      case Enums.ANCHOR_LEFT:
+        return 'translate(' + this.options.margin.left + ', ' + this.options.margin.top + ')';
+      case Enums.ANCHOR_BOTTOM:
+        return 'translate(' + this.options.margin.left + ', ' + this.calculatedHeight + ')';
+      case Enums.ANCHOR_RIGHT:
+        return  'translate(' + (this.options.width - this.options.margin.right) + ', ' + this.options.margin.top + ')';
+    }
+  }
   /**
    * fuzzy replicating nativd d3 ticks count for x scaled axis
    * @param {int} count number of ticks
