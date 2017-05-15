@@ -173,49 +173,4 @@ export default class BarAxis extends BaseAxis {
     return tickValues.length ? tickValues : [];
   }
 
-  /**
-   * Parse tick options before use
-   * @param  {object} ticks {count, format}
-   * @return {object}       {count, format}
-   */
-  _parseTicks (inData) {
-
-    if (!_isObject(inData)) {
-      console.warn('ticks must be an object with one or both properties "count" (auto | none | [0-n]) "format" (auto | d3,time,format)');
-      inData = {count:null, format:null};
-    }
-
-    var count = inData.count || null
-      , format = inData.format || null
-    ;
-
-    switch(count) {
-      case 'auto':
-      case null:
-      case undefined:
-        count = null;
-        break;
-      case 'none':
-        count = 0;
-        break;
-      default:
-        count = +count;
-        break;
-    }
-
-    // TODO: Handfe more formats that just date/time
-    switch(format) {
-      case undefined:
-      case null:
-      case 'auto':
-        format = null;
-        break;
-      default:
-        format = d3.time.format(format);
-        break;
-    }
-
-    return {count:count, format:format};
-  }
-
 }
