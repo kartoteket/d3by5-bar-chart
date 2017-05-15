@@ -109,121 +109,37 @@ export default class BarAxis extends BaseAxis {
 
   draw (selection) {
     const that = this
-    let axis
-      , rotationAttr
+    let axis = this.axis
       , axisGroup
+      , x
+      , y
     ;
 
-    if(this.options.show) {
+    axisGroup = selection.append('g')
+                          .attr('class', '.axis text')
+                          .attr('transform', this.axisTranslation)
+                          .style('font-size', '0.875rem')
+                          .call(axis);
 
-      axis = d3.svg.axis()
-                  .scale(this.options.scale)
-                  .orient(this.options.align)
-                  .ticks(this.options.ticks.count)
-                  .tickFormat(this.options.ticks.format);
+    if (this.options.rotate) {
 
-      axisGroup = selection.append('g')
-          .attr('class', function () {
-            return that.direction + ' axis';
-          })
-          .attr('transform', that._getTransform())
-          .call(axis);
-
-      if (this.options.rotate) {
-        rotationAttr = {};
-        //negative rotation needs adjustments
-        if(this.options.rotate < 0) {
-          rotationAttr.y = -7;
-          rotationAttr.x = -7;
-        } else {
-          rotationAttr.y = 0;
-          rotationAttr.x = this.direction === 'x' ? 8 : 0;
-        }
-        rotationAttr.transform = 'rotate(' + this.options.rotate + ')';
-
-
-
-        axisGroup.selectAll('text')
-                    .attr(rotationAttr)
-                    .style('text-anchor', this.options.rotate < 0 ? 'end' : 'start');
+      //negative rotation needs adjustments
+      if(this.options.rotate < 0) {
+        y = -7;
+        x = -7;
+      } else {
+        y = 0;
+        x = this.direction === 'x' ? 8 : 0;
       }
 
-      axisGroup
-          .append('text')
-            .attr('class', function () {
-              return that.direction + '-label';
-            })
-            .attr('transform', function () {
-              if (that.direction === 'y') {
-                return 'rotate(90)';
-              }
-              return 'rotate(0)';
-            })
-            .attr('y', -20)
-            .attr('x', 10)
-            .attr('dy', '.71em')
-            .attr('fill', '#777')
-            .style('font-size', '0.875rem')
-            .style('text-anchor', 'start')
-            .text(this.options.label);
-      }
+      axisGroup.selectAll('text')
+                  .attr('x', x)
+                  .attr('y', y)
+                  .attr('transform', 'rotate(' + this.options.rotate + ')')
+                  .style('text-anchor', this.options.rotate < 0 ? 'end' : 'start');
+    }
+  }
 
-      // //yAxis
-      // if(axisOpt.x.show) {
-      //   xScale = this.axis_getScale('x');
-      //   axis = d3.svg.axis()
-      //             .scale(this.options.scale)
-      //             .orient(this.options.align);
-
-      //   if (axisOpt.x.ticks.count === 0) {
-      //     axis.x.tickValues([]);
-      //   } else if (axisOpt.x.ticks.count > 0) {
-      //     axis.x.tickValues(that._setTickValues(axisOpt.x.ticks.count));
-      //   }
-
-      //   if (axisOpt.x.ticks.format) {
-      //     axis.x.tickFormat(axisOpt.x.ticks.format);
-      //   }
-
-      //   _xAxis = this.svg.append('g')
-      //       .attr('class', 'x axis')
-      //       .attr('transform', that.axis_getTransform('x'))
-      //     .call(axis.x);
-
-      //   if (axisOpt.x.rotate) {
-      //     _xAxis.selectAll('text')
-      //                 .attr('y', axisOpt.x.rotate === 90 ? -6 : 0)
-      //                 .attr('x', 7)
-      //                 // .attr("dy", ".35em")
-      //                 .attr('transform', 'rotate(' + axisOpt.x.rotate + ')')
-      //                 .style('text-anchor', 'start');
-      //   }
-
-      //   _xAxis
-      //       .append('text')
-      //         .attr('class', 'x-label')
-      //         .attr('transform', 'rotate(-90)')
-      //         .attr('x', 6)
-      //         .attr('y', this.getCalculatedWidth())
-      //         .attr('dy', '.71em')
-      //         .attr('fill', '#777')
-      //         .style('font-size', '0.875rem')
-      //         .style('text-anchor', 'start')
-      //         .text(axisOpt.x.label);
-
-
-
-        // axis.y = this.axis()
-        //             .show(axisOpt.y.show)
-        //             .pos(axisOpt.y.pos)
-        //             .align(axisOpt.y.align)
-        //             .ticks(axisOpt.y.ticks);
-
-
-        // _yAxis = this.svg.append('g')
-        //     .attr('class', 'y axis')
-        //     .attr('transform', 'translate(' + (axis.y.pos() === 'right' ? this.getCalculatedWidth() : this.options.margin.left) + ', 0)')
-        //     .call(axis.y());
 
         // if(y.label) {
         //   _yAxis.append('text')
