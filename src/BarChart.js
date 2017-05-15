@@ -89,10 +89,6 @@ export default class BarChart extends BaseChart {
       }
     }
 
-      const positions = { x: this.getBarXPos(),
-                          y: this.getBarYPos()};
-      const dimensions = {width: this.getBarWidth(),
-                          height: this.getBarHeight()};
 
 
     this.selection.each(function() {
@@ -112,8 +108,8 @@ export default class BarChart extends BaseChart {
       //
       that.svg = dom.append('svg')
           .attr('class', 'chart barchart')
-          .attr('height', that.options.height)
-          .attr('width', that.options.width);
+          .attr('height', this.options.height)
+          .attr('width', this.options.width);
 
       // The actual bars
       var bars = that.svg.selectAll('rect.chart__bar')
@@ -140,9 +136,10 @@ export default class BarChart extends BaseChart {
                         .append('g')
                         .attr('class', 'barItem')
                         .append("rect")
-                        .attr(dimensions)
-                        .attr(positions)
-                        .style("fill", function(d) {
+                        .attr('width', this.barWidth)
+                        .attr('height', this.barHeight)
+                        .attr('x', this.barXPos)
+                        .attr('y', this.barYPos)
                           return that.options.color(d.label);
                         });
 
