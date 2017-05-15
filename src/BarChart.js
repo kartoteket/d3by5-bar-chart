@@ -89,14 +89,12 @@ export default class BarChart extends BaseChart {
       }
     }
 
+    // this.selection.each(function() {
 
-
-    this.selection.each(function() {
-
-      var dom = d3.select(this)
-        , baritems
-        , mouseEvents = that.getEventsOfType(['mouse', 'click'])
-      ;
+      // var dom = d3_select(this)
+      //   , baritems
+    const mouseEvents = that.getEventsOfType(['mouse', 'click'])
+      // ;
 
       // remove old
       if (that.svg) {
@@ -106,7 +104,7 @@ export default class BarChart extends BaseChart {
       //
       // The main svg element
       //
-      that.svg = dom.append('svg')
+      this.svg = this.selection.append('svg')
           .attr('class', 'chart barchart')
           .attr('height', this.options.height)
           .attr('width', this.options.width);
@@ -173,7 +171,7 @@ export default class BarChart extends BaseChart {
                   .margin(that.options.margin)
                   .height(that.options.height)
                   .scale(that.yScale)
-                  .draw(that.svg)
+                  .draw(this.svg);
       }
 
       if (that.axis.x && that.axis.x.show()) {
@@ -184,7 +182,7 @@ export default class BarChart extends BaseChart {
                   .margin(that.options.margin)
                   .height(that.options.height)
                   .scale(that.xScale)
-                  .draw(that.svg)
+                  .draw(this.svg);
       }
       // //
       // Add the draw event to bar charts
@@ -198,8 +196,6 @@ export default class BarChart extends BaseChart {
           drawEvent.method.call(that);
         }
       }
-
-    });
 
 
     this.svg.selectAll(".axis text")
