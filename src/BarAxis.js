@@ -25,7 +25,6 @@ export default class BarAxis extends BaseAxis {
     if (direction === 'x') {
       this.options.align = Enums.ANCHOR_BOTTOM;
       this.options.pos = Enums.ANCHOR_LEFT;
-      this.options.rotate = 70;
     } else {
       this.options.align = Enums.ANCHOR_LEFT;
       this.options.pos = Enums.ANCHOR_BOTTOM;
