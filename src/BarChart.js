@@ -26,7 +26,7 @@ export default class BarChart extends BaseChart {
     // Create initial object
     //
     this.defaultOptions = {
-        padding: 2,
+        padding: 0.05,
         anchor: 'bottom',
         chartClass: 'chart-bar',
         labelPosition: 'none',
@@ -298,6 +298,7 @@ export default class BarChart extends BaseChart {
     //
     return scaleBand()
                     .domain(bDomain)
+                    .paddingInner(this.options.padding)
                     .range(bRange, 0.1);
   }
 
