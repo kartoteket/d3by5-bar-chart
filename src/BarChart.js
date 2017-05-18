@@ -8,7 +8,9 @@ import {select as d3_select,
         max as d3_max,
         sum as d3_sum,
         scaleBand,
-        scaleLinear} from 'd3';
+        scaleLinear,
+        scaleOrdinal,
+        schemeCategory20} from 'd3';
 
 import {isFunction as _isFunction, isArray as _isArray } from 'lodash';
 
@@ -37,6 +39,7 @@ export default class BarChart extends BaseChart {
         // valuesFormat: null,
         idPrefix: 'bar-',
         barLayout: 'grouped',
+        color: scaleOrdinal(schemeCategory20),
         axis: {
 
         }
