@@ -8,7 +8,7 @@ const isProduction = nodeEnv === 'production';
 
 const entry = {
   app: './src/index.js',
-  main: './src/scss/main.scss'
+  main: './docs/scss/main.scss'
   // vendor: ['react', 'react-dom']
 }
 // const plugins = [
