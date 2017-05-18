@@ -5,36 +5,26 @@ The d3by5-bar-chart is part of the d3by5 graph tools, this specific package will
 This is an internal project, you are probably better off using somethin like [C3](https://github.com/c3js/c3). That said, just give it a try and contact us back if you have any issues (no capslock please).
 
 ## USAGE
+
+### Building
+
 Build the project by running
 ```bash
 npm run build
 ```
+This will output to the docs folder `js/app.js` is the application code
 
-When building two versions are built in the dist folder.
-use the [version] version if you want to keep a specific version, use submodules or symlinks (or download) of the one without version if you want to update the lib without updating your code.
+### Running
 
-#### dist/
-A browserified and uglified version with all dependencies included. Use this if you only want a simple graph to test.
-* bar-chart-[version].min.js    // uglified and minified with version
-* bar-chart.min.js              // uglified and minified without version
+The project is built with webpack and is bundled with webpack-dev-server.
 
-## DEPENDENCIES
-Theree dependencies in package.json
-* Underscore
-* d3
-* d3by5-base-chart. The base-chart is not an npm module, get it [here](https://github.com/kartoteket/d3by5-base-chart) The package json looks for it in the sibling repo, and attempts for link it, You can change that in the Package json
-```json
-"scripts": {
-    "preinstall": "npm link ../d3by5-base-chart",
-    "preupdate": "npm link ../d3by5-base-chart"
-}
+run the server by issuing
+```bash
+npm start
 ```
+This will start the server on `http://localhost:8080` and serve files from docs
 
-After updating linkage
-```
-npm install
-```
-will get you everything else you need
+
 
 ## API
 The bar chart uses the [Base chart](https://github.com/kartoteket/d3by5-base-chart) for all getters and setters, and adds the following methods for manipulating view and state.
@@ -47,21 +37,21 @@ The bar chart uses the [Base chart](https://github.com/kartoteket/d3by5-base-cha
 All methods are chained, you can simply instanciate a new bar graph like this
 
 ```javascript
-var bar = require('d3by5-bar-chart');
+import barchart from 'BarChart'
 
-var bargraph = bargraph()
-                    .width(500)
-                    .height(400)
-                    .data([{label:'coffee', values: 509}, {label:'tea', values: 1}]);
-var caller = _.bind(bargraph.init, bargraph);
+const chart = document.getElementById('.chart')
+// create simple chart
+new BarChart().width(520)
+              .height(300)
+              .margin(0,10,20,60)
+              .data([{label:'coffee', values: 509}, {label:'tea', values: 1}])
+              .draw(chart);
 
-d3.select('.js-bar-chart')
-    .call(caller);
-
-// alternate syntax
-var selection =) d3.select('.js-bar-chart');
-bargraph.init(selection)
 ```
+
+see the exaples in docs/index.html
+
+Just run the app.
 
 ## LICENCE
 [MIT](https://opensource.org/licenses/MIT)
