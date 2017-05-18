@@ -57,12 +57,12 @@ module.exports = {
     }
   },
   output: {
-    path: path.join(__dirname, '/dist'),
+    path: path.join(__dirname, '/docs'),
     publicPath: '/',
     filename: 'BarChart.js'
   },
   devServer: {
-    contentBase: './dist',
+    contentBase: './docs',
     hot: true
   }
 };
