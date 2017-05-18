@@ -92,62 +92,56 @@ export default class BarChart extends BaseChart {
       }
     }
 
-    // this.selection.each(function() {
-
-      // var dom = d3_select(this)
-      //   , baritems
     const mouseEvents = that.getEventsOfType(['mouse', 'click'])
-      // ;
 
-      // remove old
-      if (this.svg) {
-        this.svg.remove();
-      }
+    // remove old
+    if (this.svg) {
+      this.svg.remove();
+    }
 
-      //
-      // The main svg element
-      //
-      this.svg = this.selection.append('svg')
-          .attr('class', 'chart barchart')
-          .attr('height', this.options.height)
-          .attr('width', this.options.width);
+    //
+    // The main svg element
+    //
+    this.svg = this.selection.append('svg')
+        .attr('class', 'chart barchart')
+        .attr('height', this.options.height)
+        .attr('width', this.options.width);
 
-      // The actual bars
-      var bars = this.svg.selectAll('rect.chart__bar')
-                      .data(this.options.data)
-                      .enter()
+    // The actual bars
+    var bars = this.svg.selectAll('rect.chart__bar')
+                    .data(this.options.data)
+                    .enter()
+                    .append('g')
+                    .attr("id", function(d){return d.id;})
+                    .attr('transform', function (d) {
+                      let _x = that.options.margin.left + (that.isVertical ? that.xScale(d.label) : 0)
+                        , _y = that.isVertical ? that.options.margin.top : that.xScale(d.label)
+                      ;
+                      return 'translate(' + _x + ',' + _y +')';
+                    });
+    //
+    // Supply additional data if multi dimensional
+    //
+    if (that.options.dataType === Enums.DATATYPE_MULTIDIMENSIONAL) {
+      let baritems = bars.selectAll("rect")
+                      .data(function(d) {
+                        return d.values;
+                      })
+                    .enter()
                       .append('g')
-                      .attr("id", function(d){return d.id;})
-                      .attr('transform', function (d) {
-                        let _x = that.options.margin.left + (that.isVertical ? that.xScale(d.label) : 0)
-                          , _y = that.isVertical ? that.options.margin.top : that.xScale(d.label)
-                        ;
-                        return 'translate(' + _x + ',' + _y +')';
+                      .attr('class', 'barItem')
+                      .append("rect")
+                      .attr('width', this.barWidth)
+                      .attr('height', this.barHeight)
+                      .attr('x', this.barXPos)
+                      .attr('y', this.barYPos)
+                      .attr("fill", function(d) {
+                        return that.options.color(d.label);
                       });
 
-      //
-      // Supply additional data if multi dimensional
-      //
-      if (that.options.dataType === Enums.DATATYPE_MULTIDIMENSIONAL) {
-        let baritems = bars.selectAll("rect")
-                        .data(function(d) {
-                          return d.values;
-                        })
-                      .enter()
-                        .append('g')
-                        .attr('class', 'barItem')
-                        .append("rect")
-                        .attr('width', this.barWidth)
-                        .attr('height', this.barHeight)
-                        .attr('x', this.barXPos)
-                        .attr('y', this.barYPos)
-                        .attr("fill", function(d) {
-                          return that.options.color(d.label);
-                        });
-
-          for(let e of mouseEvents) {
-            baritems.on(e.action, e.method);
-          };
+        for(let e of mouseEvents) {
+          baritems.on(e.action, e.method);
+        };
       }
       //
       // Single dimension just sets the bars
@@ -176,8 +170,6 @@ export default class BarChart extends BaseChart {
                   .height(that.options.height)
                   .scale(that.yScale)
                   .draw(this.svg);
-                  
-        // const yaxis = that.yaxis.get();
       }
 
       if (that.axis.x && that.axis.x.show()) {
