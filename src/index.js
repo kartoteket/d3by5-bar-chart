@@ -93,21 +93,30 @@ const groupedData = [{"label":"Jan","values":[
                                                   {"label":"Syria","values":604},
                                                   {"label":"Afghanistan","values":2384}
                                                   ]}];
+const chart1 = document.getElementById('chart1');
+const chart2 = document.getElementById('chart2');
 
-// create
-new BarChart().width(700)
-              .height(500)
-              // .barLayout('stacked')
-              // .anchor('left')
-              .margin(0,10,70,70)
-              // .color({'Afghanistan': '#e94f37', 'Syria': '#21c5c1'})
+// create simple chart
+new BarChart().width(520)
+              .height(300)
+              .margin(0,10,20,60)
               .data(groupedData)
-              // .axis.x.show(true)
-              //         .align('right')
-              //         .exit() // call exit to return control to barchart
-              // .axis.y.show(true)
-              //         .label('number of people')
-              //         .ticks(3)
-              //         .align('bottom')
-              //         .exit() // call exit to return control to barchart
-              .draw(document.getElementById('chart1'));
+              .draw(chart1);
+
+// create chart with options
+new BarChart().width(520)
+              .height(300)
+              .barLayout('stacked')
+              .anchor('left')
+              .margin(0,60,20,10)
+              .color({'Afghanistan': '#e94f37', 'Syria': '#21c5c1'})
+              .data(groupedData)
+              .axis.x.show(true)
+                      .align('right')
+                      .exit() // call exit to return control to barchart
+              .axis.y.show(true)
+                      .label('number of people')
+                      .ticks(3)
+                      .align('bottom')
+                      .exit() // call exit to return control to barchart
+              .draw(chart2);
