@@ -1,4 +1,5 @@
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const webpack = require('webpack');
 const path = require('path');
 
@@ -7,6 +8,7 @@ const isProduction = nodeEnv === 'production';
 
 const entry = {
   app: './src/index.js',
+  main: './src/scss/main.scss'
   // vendor: ['react', 'react-dom']
 }
 // const plugins = [
@@ -47,9 +49,21 @@ module.exports = {
         use: [
           'babel-loader',
         ]
+      },
+      { // sass / scss loader for webpack
+        test: /\.(sass|scss)$/,
+        use: ExtractTextPlugin.extract({
+          use: ['css-loader', 'sass-loader']
+        })
       }
     ]
   },
+  plugins: [
+    new ExtractTextPlugin({ // define where to save the file
+      filename: 'css/[name].css',
+      allChunks: true,
+    }),
+  ],
   resolve: {
     extensions: ['.js'],
     alias: {
@@ -59,7 +73,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, '/docs'),
     publicPath: '/',
-    filename: 'BarChart.js'
+    filename: 'js/[name].js'
   },
   devServer: {
     contentBase: './docs',
