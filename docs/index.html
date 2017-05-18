@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>d3by5 Bar Chart Examples</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/prism.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+
+  <header id="header" class="page__header">
+    <div class="container">
+      <div class="content has-text-centered">
+        <h1>d3by5 Bar Chart</h1>
+      </div>
+    </div>
+  </header>
+
+  <div class="section">
+
+    <div class="container">
+      <div class="columns Xis-gapless is-multiline">
+        <div class="column is-half">
+        <h2 class="title is-half">Default Bar chart, grouped data</h2>
+          <div id="chart1"></div>
+        </div>
+        <div class="column code-panel">
+          <pre>
+          <code class="language-js">
+const chart1 = document.getElementById('chart1')
+new BarChart().width(520)
+              .height(300)
+              .margin(0,10,20,60)
+              .data(groupedData)
+              .draw(chart1);
+          </code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+
+    <div class="container">
+      <div class="columns Xis-gapless is-multiline">
+        <div class="column is-half">
+        <h2 class="title is-half">Bar chart with multiple options</h2>
+          <div id="chart2"></div>
+        </div>
+        <div class="column code-panel">
+          <pre>
+          <code class="language-js">
+const chart1 = document.getElementById('chart1')
+new BarChart().width(520)
+              .height(300)
+              .barLayout('stacked')
+              .anchor('left')
+              .margin(0,60,20,10)
+              .color({'Afghanistan': '#e94f37', 'Syria': '#21c5c1'})
+              .data(groupedData)
+              .axis.x.show(true)
+                      .align('right')
+                      .exit() // call exit to return control to barchart
+              .axis.y.show(true)
+                      .label('number of people')
+                      .ticks(3)
+                      .align('bottom')
+                      .exit() // call exit to return control to barchart
+              .draw(chart2);
+          </code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        d3by5
+      </div>
+    </div>
+  </footer>
+
+<a href="https://github.com/kartoteket/d3by5-bar-chart"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+
+  <script src="js/app.js"></script>
+  <script src="js/prism.js"></script>
+</body>
+</html>

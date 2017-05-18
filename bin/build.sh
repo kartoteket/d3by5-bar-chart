@@ -28,11 +28,14 @@ buildall()
   echo 'Building full package version '$PACKAGE_VERSION
   # create the directories
   mkdir -p dist
-  # browserify the full dev version without any uglifying
-  browserify src/bar-graph.js | uglifyjs -m -c > "dist/bar-graph-${PACKAGE_VERSION}.min.js";
-#   --source-map "dist/bar-graph-${PACKAGE_VERSION}.min.js.map"
 
-  browserify src/bar-graph.js | uglifyjs -m -c > dist/bar-graph.min.js;
+  # browserify the full dev version without any uglifying
+  browserify -x 'd3' -x 'underscore' src/bar-chart.js > "dist/bar-chart-${PACKAGE_VERSION}_nodep.js";
+  browserify src/bar-chart.js > "dist/bar-chart-${PACKAGE_VERSION}.js";
+#  browserify src/bar-chart.js | uglifyjs -m -c > "dist/bar-chart-${PACKAGE_VERSION}.min.js";
+#   --source-map "dist/bar-chart-${PACKAGE_VERSION}.min.js.map"
+
+  # browserify src/bar-chart.js | uglifyjs -m -c > dist/bar-chart.min.js;
  #  --source-map dist/pie-chart.min.js.map
 }
 

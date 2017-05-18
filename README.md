@@ -1,65 +1,57 @@
-# d3by5-horisontal-bar-graph
-The d3by5-horisontal-bar-graph is part of the d3by5 graph tools, this specific package will draw a pie chart based on Mike Bostocks [Towards Reusable Charts](https://bost.ocks.org/mike/chart/)
+# d3by5-bar-chart
+The d3by5-bar-chart is part of the d3by5 graph tools, this specific package will draw a pie chart based on Mike Bostocks [Towards Reusable Charts](https://bost.ocks.org/mike/chart/)
 
 ## NOTE
 This is an internal project, you are probably better off using somethin like [C3](https://github.com/c3js/c3). That said, just give it a try and contact us back if you have any issues (no capslock please).
 
 ## USAGE
+
+### Building
+
 Build the project by running
 ```bash
 npm run build
 ```
+This will output to the docs folder `js/app.js` is the application code
 
-When building two versions are built in the dist folder.
-use the [version] version if you want to keep a specific version, use submodules or symlinks (or download) of the one without version if you want to update the lib without updating your code.
+### Running
 
-#### dist/
-A browserified and uglified version with all dependencies included. Use this if you only want a simple graph to test.
-* bar-graph-[version].min.js    // uglified and minified with version
-* bar-graph.min.js              // uglified and minified without version
+The project is built with webpack and is bundled with webpack-dev-server.
 
-## DEPENDENCIES
-Theree dependencies in package.json
-* Underscore
-* d3
-* file:./d3by5-base-chart. The base-chart is not an npm module, get it [here](https://github.com/kartoteket/d3by5-base-chart) and drop it next to the bar graph, or use some form of shimming tool like [aliasify] (https://www.npmjs.com/package/aliasify)
-
+run the server by issuing
+```bash
+npm start
 ```
-npm install
-```
-will get you everything else you need
+This will start the server on `http://localhost:8080` and serve files from docs
+
+
 
 ## API
-### Required
-* width  - Number: the height of the chart
-* height - Number: the width of the chart
-* data   - Array: the data that produces the chart, [{label: String, value: Number}, {xx}]
-
-### Optional
-* fillColor - String/hex: the fillcolor (defaults to 'coral')
-* padding - Number: the padding to use (detaults to 2)
-* direction - String: the direction of the graph ('horizontal' | 'vertical') (defaults to ('horizontal'))
+The bar chart uses the [Base chart](https://github.com/kartoteket/d3by5-base-chart) for all getters and setters, and adds the following methods for manipulating view and state.
+* **anchor** - {String} - the direction of the graph from where it is achored ('top' | 'bottom' | 'left' | 'right') (defaults to ('bottom'))
+* **label** - {String} - where to position the labels ('fit' | 'none' | 'axis')
+* **barLayout** - {String} - how to display multiple series ('stacked' | 'grouped')
 
 
 ## EXAMPLE
 All methods are chained, you can simply instanciate a new bar graph like this
 
 ```javascript
-var bar = require('d3by5-horisontal-bar-graph');
+import barchart from 'BarChart'
 
-var bargraph = bargraph()
-                    .width(500)
-                    .height(400)
-                    .data([{label:'coffee', values: 509}, {label:'tea', values: 1}]);
-var caller = _.bind(bargraph.init, bargraph);
+const chart = document.getElementById('.chart')
+// create simple chart
+new BarChart().width(520)
+              .height(300)
+              .margin(0,10,20,60)
+              .data([{label:'coffee', values: 509}, {label:'tea', values: 1}])
+              .draw(chart);
 
-d3.select('.js-bar-graph')
-    .call(caller);
-
-// alternate syntax
-var selection =) d3.select('.js-bar-graph');
-bargraph.init(selection)
 ```
+
+see the exaples in docs/index.html
+
+Just run the app.
 
 ## LICENCE
 [MIT](https://opensource.org/licenses/MIT)

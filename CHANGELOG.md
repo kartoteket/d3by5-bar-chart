@@ -5,10 +5,24 @@ This project adheres (well, maybe not quite) to [Semantic Versioning](http://sem
 
 ## [Unreleased]
 ### Added
-- Added posibility to set directions (horisontal | vertical)
+- Added posibility to set anchors ('top' | 'bottom' | 'left' | 'right')
+- Added inline labels to match the anchoring
+- Added support for grouped bars
+- Added support for stacked bars
+- Added support for theming (inherited from base chart)
+- Added listeners for events on individual bars
 
-## Changed
+### Changed
 - More details in the README
+- Refactored, creating a single barOptions for positions and dimensions of bars
+- Refactored, bar positions as separate class
+- Refactored, dimensions as separate class
+- renamed ordinal and linear to x and y for all scales and axis
+- removed a dependency on the init method. selection can now be injected runtime
+
+### Fixed
+- Ensure bar width never goes below 1px
+- Fixed an issue with the UMD loader for label options
 
 ## [0.0.1] - 2016-06-01
 ### Added
