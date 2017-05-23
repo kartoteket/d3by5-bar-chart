@@ -8,6 +8,18 @@ This is an internal project, you are probably better off using somethin like [C3
 
 ### Building
 
+set up all dependencies
+```bash
+npm install
+```
+
+`Tree Shaking`
+If you want to minimise import sizes for lodash, create ES6 modules first, running from project root
+```bash
+./node_modules/lodash-cli/bin/lodash modularize exports=es -o ./node_modules/lodash-es/
+```
+
+
 Build the project by running
 ```bash
 npm run build
