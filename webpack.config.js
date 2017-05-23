@@ -8,7 +8,8 @@ const isProduction = nodeEnv === 'production';
 
 const entry = {
   app: './src/index.js',
-  main: './docs/scss/main.scss'
+  main: './docs/scss/main.scss',
+  vendor: ['lodash', 'd3']
   // vendor: ['react', 'react-dom']
 }
 // const plugins = [
@@ -38,17 +39,15 @@ const entry = {
 //   }
 // ];
 
-
-module.exports = {
+const config = {
   entry: entry,
   module: {
       rules: [
       {
         test: /\.js?$/,
         exclude: /node_modules/,
-        use: [
-          'babel-loader',
-        ]
+        // use: ['babel-loader','lodash']
+        use: ['babel-loader']
       },
       { // sass / scss loader for webpack
         test: /\.(sass|scss)$/,
@@ -59,6 +58,11 @@ module.exports = {
     ]
   },
   plugins: [
+    new LodashModuleReplacementPlugin,
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['app','vendor'],
+      minChunks: Infinity
+    }),
     new ExtractTextPlugin({ // define where to save the file
       filename: 'css/[name].css',
       allChunks: true,
@@ -67,7 +71,8 @@ module.exports = {
   resolve: {
     extensions: ['.js'],
     alias: {
-      d3: 'd3/build/d3.node.js'
+      d3: 'd3/build/d3.node.js',
+      'lodash-es': 'lodash-es/lodash.js'
     }
   },
   output: {
@@ -81,5 +86,6 @@ module.exports = {
   }
 };
 
+module.exports = config;
 // dashboard
 //     "start": "webpack-dashboard -- webpack-dev-server --devtool source-map --progress --colors --hot --config ./webpack.config.js ",
