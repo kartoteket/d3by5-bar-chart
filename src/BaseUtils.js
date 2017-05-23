@@ -2,14 +2,15 @@ import Enums from './Enums';
 import {timeFormat,
         select as d3_select,
         format as d3_format} from 'd3';
-import {isFunction as _isFunction,
-        isNumber as _isNumber,
-        isArray as _isArray,
-        isString as _isString,
-        isObject as _isObject,
-        has as _has,
-        uniqueId as _uniqueId,
-        uniq as _uniq} from 'lodash';
+// import _ from 'lodash'
+import {isFunction,
+        isNumber,
+        isArray,
+        isString,
+        isObject,
+        has,
+        uniqueId,
+        uniq} from 'lodash';
 
 export default class BaseUtils {
 
@@ -67,11 +68,11 @@ export default class BaseUtils {
     _createMargins  (v1, v2, v3, v4) {
       var margin;
         // valid margins object
-      if (_isObject(v1) &&
-                _has(v1, 'top') &&
-                _has(v1, 'right') &&
-                _has(v1, 'bottom') &&
-                _has(v1, 'left')
+      if (isObject(v1) &&
+                has(v1, 'top') &&
+                has(v1, 'right') &&
+                has(v1, 'bottom') &&
+                has(v1, 'left')
                 ) {
 
         // sanitice undefines. enforce number
@@ -85,7 +86,7 @@ export default class BaseUtils {
         return v1;
       }
 
-      if (!_isNumber(v1)) {
+      if (!isNumber(v1)) {
         console.error('Could not match ', arguments ,' to any valid margin');
         return;// this.options.margin;
       }
@@ -141,7 +142,7 @@ export default class BaseUtils {
       let list = [];
       const that = this;
 
-      if (_isString(pattern)) {
+      if (isString(pattern)) {
         pattern = [pattern];
       }
 
@@ -153,7 +154,7 @@ export default class BaseUtils {
           }));
         }
       };
-      return _uniq(list);
+      return uniq(list);
     }
 
 
@@ -181,16 +182,16 @@ export default class BaseUtils {
       const idPrefix = this.options.idPrefix;
 
       const data = inData.map(function (d, i) {
-        if (_isArray(d.values)) {
+        if (isArray(d.values)) {
           d.values = d.values.map(function(value, index) {
                      return {
                               label: value.label,
                               values: value.values,
-                              id: _uniqueId(idPrefix + i + '-')
+                              id: uniqueId(idPrefix + i + '-')
                             };
                     });
         }
-        d.id = d.id || _uniqueId(idPrefix);
+        d.id = d.id || uniqueId(idPrefix);
         return d;
       });
 
@@ -206,13 +207,13 @@ export default class BaseUtils {
       const that = this;
 
       // check if the color is a function (accessor), return it if so
-      if(_isFunction(color)) {
+      if(isFunction(color)) {
         return color;
       }
       // if the colors are a range, check the length
       // if the size is bigger or equal to the data, use this accessor
       // if not, use a modulo opeartor in the accessor
-      if (_isArray(color) && color.length) {
+      if (isArray(color) && color.length) {
 
         if(color.length > inData.length) {
           return function (i) {
@@ -228,9 +229,9 @@ export default class BaseUtils {
 
       // if the color is an object with a key value
       // use it as teh accessor
-      if (_isObject(color)) {
+      if (isObject(color)) {
         return function (l) {
-          if (_has(color, l)) {
+          if (has(color, l)) {
             return color[l];
           }
           return '#007AFF';
@@ -254,9 +255,9 @@ export default class BaseUtils {
     _getDataDimensions  (inData) {
       var firstDataNode;
 
-      if (_isArray(inData)) {
+      if (isArray(inData)) {
         firstDataNode = !!inData.length ? inData[0] : [];
-        if (_has(firstDataNode, 'values') && _isArray(firstDataNode.values)) {
+        if (has(firstDataNode, 'values') && isArray(firstDataNode.values)) {
           return Enums.DATATYPE_MULTIDIMENSIONAL;
         }
       }
@@ -278,7 +279,7 @@ export default class BaseUtils {
     }
 
     _isValidArray (inData) {
-      return _isArray(inData) && inData.length;
+      return isArray(inData) && inData.length;
     }
 
 
